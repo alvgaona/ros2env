@@ -1,7 +1,7 @@
 context:
   version: ${{ env.get("ROSENV_VERSION", default="0.1.0") }}
 
-recipe:
+package:
   name: rosenv
   version: ${{ version }}
 
