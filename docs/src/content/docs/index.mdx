@@ -1,0 +1,107 @@
+---
+title: rosenv
+description: ROS 2 distribution manager for pixi global installations
+template: splash
+hero:
+  title: |
+    <span style="font-weight: 700">rosenv</span>
+  tagline: ROS 2 distribution manager for pixi global installations
+  actions:
+    - text: Get Started
+      link: /ros2env/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: Commands Reference
+      link: /ros2env/commands/
+      icon: document
+    - text: View on GitHub
+      link: https://github.com/alvgaona/ros2env
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+import { VERSION } from '../../version.ts';
+
+<div style="text-align: center; margin: 2rem 0;">
+  <span class="version-badge">
+    Latest: v{VERSION}
+  </span>
+</div>
+
+## Overview
+
+rosenv manages ROS 2 distributions installed via pixi global. It creates symlinks in `/opt/ros/` for compatibility with standard ROS 2 tools and provides environment isolation when switching between distributions.
+
+## Features
+
+<CardGrid>
+  <Card title="Auto-detection" icon="magnifier">
+    Scans `~/.pixi/envs/` and automatically detects ROS 2 installations
+  </Card>
+  <Card title="Symlink Management" icon="link">
+    Creates and maintains symlinks in `/opt/ros/` for tool compatibility
+  </Card>
+  <Card title="Environment Isolation" icon="shield">
+    Cleanly switches between distributions with automatic variable cleanup
+  </Card>
+  <Card title="Diagnostic Tools" icon="setting">
+    Built-in verification and troubleshooting commands
+  </Card>
+</CardGrid>
+
+## Quick Start
+
+<Tabs>
+  <TabItem label="macOS">
+
+```bash
+# Install ROS 2 with pixi
+pixi global install --environment ros-humble-desktop \
+  -c robostack-staging ros-humble-desktop
+
+# Setup rosenv
+sudo mkdir -p /opt/ros
+sudo chown $USER /opt/ros
+rosenv setup
+
+# Add shell integration
+rosenv init zsh >> ~/.zshrc
+source ~/.zshrc
+
+# Activate distribution
+rosenv activate humble
+```
+
+  </TabItem>
+  <TabItem label="Linux">
+
+```bash
+# Install ROS 2 with pixi
+pixi global install --environment ros-humble-desktop \
+  -c robostack-staging ros-humble-desktop
+
+# Setup rosenv
+sudo mkdir -p /opt/ros
+sudo chown $USER /opt/ros
+rosenv setup
+
+# Add shell integration
+rosenv init bash >> ~/.bashrc
+source ~/.bashrc
+
+# Activate distribution
+rosenv activate humble
+```
+
+  </TabItem>
+</Tabs>
+
+## Why rosenv?
+
+ROS 2 tools expect distributions at `/opt/ros/<distro>`. When using pixi global for installations, rosenv:
+
+- Creates necessary symlinks for compatibility
+- Manages environment variables for clean switching
+- Provides verification and diagnostic tools
+- Works with existing ROS 2 workflows and tutorials
