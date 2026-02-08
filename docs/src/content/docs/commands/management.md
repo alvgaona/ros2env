@@ -66,13 +66,12 @@ Scanning for changes...
 
 Existing symlinks:
   ✓ humble: up to date
-  ✓ jazzy: up to date
 
 New distributions found:
-  + iron → ~/.pixi/envs/ros-iron-desktop
+  + jazzy → ~/.pixi/envs/ros-jazzy-desktop
 
 Creating symlinks:
-  ✓ /opt/ros/iron → ~/.pixi/envs/ros-iron-desktop
+  ✓ /opt/ros/jazzy → ~/.pixi/envs/ros-jazzy-desktop
 
 Refresh complete.
 ```

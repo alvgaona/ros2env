@@ -68,37 +68,23 @@ After this, rosenv works without sudo.
 
 Install ROS 2 distributions globally using pixi. Each distribution is installed to its own environment (~3.3GB each).
 
-### Humble Hawksbill (LTS)
+<Aside type="note">
+Currently supported distributions: **Humble** and **Jazzy**
+</Aside>
+
+### Humble Hawksbill (LTS - Recommended)
 
 ```bash
 pixi global install --environment ros-humble-desktop \
-  -c robostack-staging ros-humble-desktop
+  -c robostack-humble ros-humble-desktop
 ```
 
-### Iron Irwini
-
-```bash
-pixi global install --environment ros-iron-desktop \
-  -c robostack-staging ros-iron-desktop
-```
-
-### Jazzy Jalisco
+### Jazzy Jalisco (Latest)
 
 ```bash
 pixi global install --environment ros-jazzy-desktop \
-  -c robostack-staging ros-jazzy-desktop
+  -c robostack-jazzy ros-jazzy-desktop
 ```
-
-### Rolling
-
-```bash
-pixi global install --environment ros-rolling-desktop \
-  -c robostack-staging ros-rolling-desktop
-```
-
-<Aside>
-Check [RoboStack](https://robostack.github.io/) for the latest available distributions.
-</Aside>
 
 ## After Installation
 

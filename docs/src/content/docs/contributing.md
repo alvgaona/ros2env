@@ -173,7 +173,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 **Examples:**
 
 ```
-feat: add support for ROS 2 Rolling distribution
+feat: add support for ROS 2 Jazzy distribution
 
 fix: resolve symlink validation error on macOS
 
