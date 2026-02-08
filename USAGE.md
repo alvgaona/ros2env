@@ -16,7 +16,11 @@ If you need help installing ROS 2 distributions with pixi:
 rosenv setup-guide
 ```
 
-This shows comprehensive installation instructions, workflow examples, and tips!
+This opens a comprehensive guide in your browser with:
+- Pixi installation instructions
+- ROS 2 distribution installation commands
+- Complete workflow examples
+- Management and troubleshooting tips
 
 ### In a New Terminal Session
 
@@ -41,7 +45,7 @@ rosenv deactivate
 ### Direct rosenv Commands
 
 ```bash
-# Show pixi installation guide (helpful for new users!)
+# Open setup guide in browser (helpful for new users!)
 rosenv setup-guide
 
 # List distributions

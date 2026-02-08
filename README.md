@@ -32,7 +32,12 @@ Make sure `~/.local/bin` is in your PATH.
 rosenv setup-guide
 ```
 
-This shows comprehensive installation instructions, including how to install ROS 2 with pixi.
+This opens the comprehensive [Setup Guide](SETUP_GUIDE.md) in your browser, including:
+- How to install pixi
+- How to install ROS 2 distributions with pixi global
+- Complete workflow examples
+- Management commands
+- Troubleshooting tips
 
 ### 2. Setup Symlinks
 
@@ -81,7 +86,7 @@ rosenv setup         # Auto-detect and create symlinks
 rosenv list          # List available distributions
 rosenv status        # Show current active distribution
 rosenv doctor        # Verify installation
-rosenv setup-guide   # Show pixi installation guide
+rosenv setup-guide   # Open setup guide in browser
 ```
 
 ### Distribution Management
