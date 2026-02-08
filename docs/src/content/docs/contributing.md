@@ -3,51 +3,151 @@ title: Contributing
 description: Development guidelines and contribution process
 ---
 
-import { Tabs, TabItem, Aside, FileTree } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Card, CardGrid, Steps, FileTree, LinkCard, Badge } from '@astrojs/starlight/components';
 
-## Development Setup
+## Welcome Contributors!
 
 **ros2env** is the project name. The binary is called `rosenv`.
 
+We welcome contributions of all kinds: bug fixes, new features, documentation improvements, and more. This guide will
+help you get started with development.
+
+<CardGrid>
+  <Card title="🐛 Bug Reports" icon="warning">
+    Found a bug? [Open an issue](https://github.com/alvgaona/ros2env/issues/new) with details and reproduction steps.
+  </Card>
+  <Card title="✨ Feature Requests" icon="rocket">
+    Have an idea? [Start a discussion](https://github.com/alvgaona/ros2env/issues/new) to propose new features.
+  </Card>
+  <Card title="📖 Documentation" icon="document">
+    Improve docs by fixing typos, adding examples, or clarifying instructions.
+  </Card>
+  <Card title="🧪 Testing" icon="approve-check">
+    Add test cases, improve coverage, or report edge cases.
+  </Card>
+</CardGrid>
+
+---
+
+## Development Setup
+
 ### Prerequisites
 
-- Rust 1.92+ ([Install via rustup](https://rustup.rs/))
-- Git
+<CardGrid>
+  <Card title="Rust 1.92+" icon="rocket">
+    Install via [rustup](https://rustup.rs/)
+    
+    ```bash
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    ```
+  </Card>
+  <Card title="Git" icon="github">
+    Version control for cloning and contributing
+    
+    ```bash
+    # macOS
+    brew install git
+    
+    # Linux (Ubuntu/Debian)
+    sudo apt install git
+    ```
+  </Card>
+</CardGrid>
 
-### Building from Source
+### Clone the Repository
 
-Clone the repository:
+<Steps>
 
-<Tabs>
-  <TabItem label="HTTPS">
+1. **Fork the repository** on GitHub
 
-```bash
-git clone https://github.com/alvgaona/ros2env.git
-cd ros2env
-```
+   Visit [github.com/alvgaona/ros2env](https://github.com/alvgaona/ros2env) and click "Fork"
 
-  </TabItem>
-  <TabItem label="SSH">
+2. **Clone your fork**
 
-```bash
-git clone git@github.com:alvgaona/ros2env.git
-cd ros2env
-```
+   <Tabs>
+     <TabItem label="HTTPS">
 
-  </TabItem>
-</Tabs>
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/ros2env.git
+   cd ros2env
+   ```
 
-Build the project:
+     </TabItem>
+     <TabItem label="SSH">
 
-```bash
-cargo build --release
-```
+   ```bash
+   git clone git@github.com:YOUR_USERNAME/ros2env.git
+   cd ros2env
+   ```
 
-The binary will be at `target/release/rosenv`.
+     </TabItem>
+   </Tabs>
+
+3. **Add upstream remote**
+
+   ```bash
+   git remote add upstream https://github.com/alvgaona/ros2env.git
+   ```
+
+4. **Build the project**
+
+   ```bash
+   cargo build --release
+   ```
+
+   The binary will be at `target/release/rosenv`
+
+5. **Verify the build**
+
+   ```bash
+   ./target/release/rosenv --version
+   ```
+
+</Steps>
+
+<Aside type="tip" title="Quick Build">
+Use `cargo build` (without `--release`) for faster compilation during development. Release builds are optimized but
+take longer.
+</Aside>
+
+---
+
+## Project Structure
+
+<FileTree>
+
+- src/
+  - main.rs <Badge text="849 lines" variant="note" /> All application logic
+- tests/
+  - integration_tests.rs <Badge text="15 tests" variant="success" /> CLI integration tests
+  - edge_cases.rs <Badge text="14 tests" variant="success" /> Filesystem edge cases
+- recipe/
+  - recipe.yaml Conda package recipe (rattler-build)
+- .github/workflows/
+  - ci.yml Run tests, clippy, formatting
+  - release.yml Build and publish releases
+  - deploy-docs.yml Deploy documentation site
+- docs/ <Badge text="Astro Starlight" variant="tip" /> Documentation site
+  - src/content/docs/ Markdown documentation pages
+  - astro.config.mjs Site configuration
+- Cargo.toml Package metadata and dependencies
+- README.md Project overview
+- LICENSE <Badge text="MIT" variant="default" /> MIT license
+
+</FileTree>
+
+<Aside type="note" title="Single-File Architecture">
+The entire application logic is in `src/main.rs` (849 lines). This keeps the codebase simple and easy to navigate for
+contributors.
+</Aside>
+
+---
 
 ## Testing
 
-ros2env has 39 tests with ~54% line coverage and 78% function coverage.
+<Badge text="39 tests" variant="success" size="large" />
+<Badge text="~54% line coverage" variant="note" size="large" />
+<Badge text="78% function coverage" variant="success" size="large" />
 
 ### Run All Tests
 
@@ -57,101 +157,250 @@ cargo test
 
 ### Test Categories
 
-- **Unit tests** (10 tests) - Core functions and helpers in `src/main.rs`
-- **Edge case tests** (14 tests) - Filesystem operations in `tests/edge_cases.rs`
-- **Integration tests** (15 tests) - CLI commands in `tests/integration_tests.rs`
+<CardGrid>
+  <Card title="Unit Tests" icon="approve-check">
+    <Badge text="10 tests" variant="success" />
+    
+    Core functions and helpers in `src/main.rs`
+    
+    ```bash
+    cargo test --bin rosenv
+    ```
+  </Card>
+  
+  <Card title="Edge Case Tests" icon="warning">
+    <Badge text="14 tests" variant="success" />
+    
+    Filesystem operations in `tests/edge_cases.rs`
+    
+    ```bash
+    cargo test --test edge_cases
+    ```
+  </Card>
+  
+  <Card title="Integration Tests" icon="rocket">
+    <Badge text="15 tests" variant="success" />
+    
+    CLI commands in `tests/integration_tests.rs`
+    
+    ```bash
+    cargo test --test integration_tests
+    ```
+  </Card>
+</CardGrid>
 
-### Run Specific Tests
+### Advanced Testing
+
+<Tabs>
+  <TabItem label="Specific Test">
 
 ```bash
-# Run unit tests only
-cargo test --bin rosenv
+# Run a specific test by name
+cargo test test_list_command
 
-# Run integration tests only
-cargo test --test integration_tests
-
-# Run specific test
-cargo test test_name
+# Run with output
+cargo test test_list_command -- --nocapture
 ```
 
-### Test with Output
+  </TabItem>
+  <TabItem label="Coverage Report">
 
 ```bash
-cargo test -- --nocapture
-```
-
-### Generate Coverage Report
-
-Requires `cargo-llvm-cov`:
-
-```bash
+# Install coverage tool
 cargo install cargo-llvm-cov
+
+# Generate coverage report
 cargo llvm-cov --all-features --workspace
+
+# Generate HTML report
+cargo llvm-cov --all-features --workspace --html
 ```
+
+  </TabItem>
+  <TabItem label="Watch Mode">
+
+```bash
+# Install cargo-watch
+cargo install cargo-watch
+
+# Auto-run tests on file changes
+cargo watch -x test
+```
+
+  </TabItem>
+</Tabs>
+
+<Aside type="tip" title="Test-Driven Development">
+When adding new features:
+1. Write a failing test first
+2. Implement the feature
+3. Verify the test passes
+4. Add edge case tests
+</Aside>
+
+---
 
 ## Code Quality
 
+All code must pass formatting and linting checks before being merged.
+
 ### Formatting
 
-All code must be formatted with rustfmt:
+<Steps>
 
-```bash
-cargo fmt --all
-```
+1. **Check formatting**
+
+   ```bash
+   cargo fmt --all --check
+   ```
+
+2. **Auto-format code**
+
+   ```bash
+   cargo fmt --all
+   ```
+
+</Steps>
+
+<Aside type="caution" title="CI Requirement">
+Unformatted code will fail CI checks and block your PR from being merged.
+</Aside>
 
 ### Linting
 
-All code must pass clippy with no warnings:
+<Steps>
+
+1. **Run clippy**
+
+   ```bash
+   cargo clippy --all-targets --all-features -- -D warnings
+   ```
+
+2. **Fix clippy warnings**
+
+   ```bash
+   cargo clippy --all-targets --all-features --fix
+   ```
+
+</Steps>
+
+<Aside type="caution" title="Zero Warnings Policy">
+All clippy warnings must be resolved. The CI runs with `-D warnings` which treats warnings as errors.
+</Aside>
+
+### Pre-Commit Checklist
+
+Before committing, run this sequence:
 
 ```bash
+# 1. Format code
+cargo fmt --all
+
+# 2. Check for warnings
 cargo clippy --all-targets --all-features -- -D warnings
+
+# 3. Run all tests
+cargo test
+
+# 4. Build release binary
+cargo build --release
 ```
 
-This runs in CI and will block PRs if it fails.
+<Aside type="tip" title="Automation Tip">
+Create a shell alias for the pre-commit checks:
+
+```bash
+# Add to ~/.zshrc or ~/.bashrc
+alias precommit='cargo fmt --all && cargo clippy --all-targets --all-features -- -D warnings && cargo test'
+```
+
+Then just run `precommit` before committing!
+</Aside>
+
+---
 
 ## Development Guidelines
 
 ### Code Style
 
-1. **Naming Conventions**
-   - Follow Rust standard naming (snake_case for functions, CamelCase for types)
-   - Use descriptive names that indicate purpose
-
-2. **Comments**
-   - Use `//` for inline comments
-   - Use `/* */` only for section headers
-   - No decorative comment dividers (e.g., `// ========`)
-   - Write comments explaining "why", not "what"
-
-3. **Function Design**
-   - Keep functions focused on single responsibility
-   - Limit function length (prefer <50 lines)
-   - Use `Result<T>` for error handling
-
-4. **Error Handling**
-   - Use `anyhow::Result` for application errors
-   - Provide context with `.context()`
-   - Write user-friendly error messages
+<CardGrid>
+  <Card title="Naming Conventions" icon="document">
+    - **Functions**: `snake_case`
+    - **Types**: `CamelCase`
+    - **Constants**: `SCREAMING_SNAKE_CASE`
+    - Use descriptive names
+  </Card>
+  
+  <Card title="Comments" icon="pencil">
+    - Use `//` for inline comments
+    - Use `/* */` for section headers only
+    - No decorative dividers
+    - Explain "why", not "what"
+  </Card>
+  
+  <Card title="Function Design" icon="star">
+    - Single responsibility
+    - Prefer <50 lines
+    - Use `Result<T>` for errors
+    - Document public functions
+  </Card>
+  
+  <Card title="Error Handling" icon="warning">
+    - Use `anyhow::Result`
+    - Add context with `.context()`
+    - User-friendly messages
+    - Proper error propagation
+  </Card>
+</CardGrid>
 
 ### Testing Guidelines
 
-1. **Test Coverage**
-   - Add tests for new functionality
-   - Update existing tests when behavior changes
-   - Integration tests must not require `/opt/ros` setup
+<Aside type="note" title="Test Requirements">
 
-2. **Test Structure**
-   - Unit tests in `#[cfg(test)]` modules
-   - Integration tests in `tests/` directory
-   - Edge case tests separate from happy path
+**All new features must include:**
+- ✅ Unit tests for core logic
+- ✅ Integration tests for CLI commands
+- ✅ Edge case tests for error conditions
+- ✅ Documentation updates
 
-3. **Test Naming**
-   - Use `test_` prefix
-   - Descriptive names: `test_activate_missing_distro`
+</Aside>
 
-### Commit Guidelines
+**Test Naming:**
+```rust
+// ✅ Good: Descriptive and clear
+#[test]
+fn test_activate_missing_distro() { ... }
 
-Use [Conventional Commits](https://www.conventionalcommits.org/):
+// ❌ Bad: Vague and unclear
+#[test]
+fn test_activate() { ... }
+```
+
+**Test Structure:**
+```rust
+#[test]
+fn test_feature_name() {
+    // Arrange: Set up test data
+    let input = create_test_input();
+    
+    // Act: Execute the code
+    let result = function_under_test(input);
+    
+    // Assert: Verify expectations
+    assert!(result.is_ok());
+}
+```
+
+---
+
+## Commit Guidelines
+
+<Badge text="Conventional Commits" variant="tip" size="large" />
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for clear, structured commit
+history.
+
+### Commit Format
 
 ```
 <type>: <description>
@@ -161,156 +410,417 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 [optional footer]
 ```
 
-**Types:**
-- `feat:` - New features
-- `fix:` - Bug fixes
-- `docs:` - Documentation changes
-- `test:` - Test additions or modifications
-- `refactor:` - Code refactoring
-- `chore:` - Maintenance tasks
-- `ci:` - CI/CD changes
+### Commit Types
 
-**Examples:**
+| Type | When to Use | Example |
+|------|------------|---------|
+| `feat:` | New features | `feat: add support for ROS 2 Jazzy distribution` |
+| `fix:` | Bug fixes | `fix: resolve symlink validation error on macOS` |
+| `docs:` | Documentation only | `docs: update getting started guide with troubleshooting` |
+| `test:` | Test changes | `test: add edge case tests for broken symlinks` |
+| `refactor:` | Code refactoring | `refactor: extract symlink creation logic` |
+| `chore:` | Maintenance | `chore: update dependencies` |
+| `ci:` | CI/CD changes | `ci: add clippy check to GitHub Actions` |
 
-```
+### Commit Rules
+
+<Aside type="caution" title="Commit Requirements">
+
+- ✅ Subject line ≤72 characters
+- ✅ Use imperative mood ("add" not "added")
+- ✅ No period at end of subject
+- ✅ Separate subject from body with blank line
+- ✅ Body explains "what" and "why", not "how"
+
+</Aside>
+
+### Good Commit Examples
+
+```bash
 feat: add support for ROS 2 Jazzy distribution
 
-fix: resolve symlink validation error on macOS
-
-docs: update getting started guide with troubleshooting
-
-test: add edge case tests for broken symlinks
+Adds detection and symlink management for Jazzy Jalisco.
+Updates robostack channel to robostack-jazzy.
 ```
 
-**Rules:**
-- Keep subject line ≤72 characters
-- Use imperative mood ("add" not "added")
-- No period at end of subject line
-- Separate subject from body with blank line
+```bash
+fix: resolve symlink validation error on macOS
+
+The symlink validation was failing on macOS due to different
+readlink behavior. Updated to use std::fs::read_link for
+cross-platform compatibility.
+
+Fixes #42
+```
+
+```bash
+docs: update getting started guide with troubleshooting
+
+Adds common troubleshooting scenarios:
+- Permission denied errors
+- Distribution not detected
+- Shell integration issues
+```
+
+### Bad Commit Examples
+
+```bash
+# ❌ Too vague
+fix: bug fix
+
+# ❌ Not imperative mood  
+feat: added new feature
+
+# ❌ Too long subject
+feat: add support for ROS 2 Jazzy distribution including detection, symlinks, and documentation updates
+
+# ❌ Wrong type
+chore: add new feature
+```
+
+---
 
 ## Pull Request Process
 
 ### Before Submitting
 
-Run quality checks:
+<Steps>
 
-```bash
-cargo fmt --all --check          # Check formatting
-cargo clippy -- -D warnings      # Check linting
-cargo test                       # Run all tests
+1. **Create a feature branch**
+
+   ```bash
+   git checkout -b feature/my-feature
+   ```
+
+   <Aside type="tip" title="Branch Naming">
+   Use descriptive branch names:
+   - `feature/jazzy-support`
+   - `fix/macos-symlink-validation`
+   - `docs/troubleshooting-guide`
+   </Aside>
+
+2. **Make your changes**
+
+   Edit code, add tests, update docs
+
+3. **Run quality checks**
+
+   ```bash
+   cargo fmt --all --check
+   cargo clippy -- -D warnings
+   cargo test
+   ```
+
+4. **Commit with conventional commits**
+
+   ```bash
+   git add .
+   git commit -m "feat: add support for feature X"
+   ```
+
+5. **Push to your fork**
+
+   ```bash
+   git push origin feature/my-feature
+   ```
+
+6. **Open a pull request**
+
+   Go to GitHub and click "New Pull Request"
+
+</Steps>
+
+### PR Description Template
+
+```markdown
+## Description
+Brief description of what this PR does
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation update
+- [ ] Refactoring
+
+## Changes Made
+- Added X functionality
+- Fixed Y issue
+- Updated Z documentation
+
+## Testing
+- [ ] All existing tests pass
+- [ ] Added new tests for changes
+- [ ] Tested manually on macOS/Linux
+
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Ran `cargo fmt --all`
+- [ ] Ran `cargo clippy` with no warnings
+- [ ] Updated documentation
+- [ ] Added tests for new features
 ```
 
-### Submitting PR
+### PR Review Process
 
-1. Create feature branch from `main`:
+<Steps>
 
-```bash
-git checkout -b feature/my-feature
-```
+1. **Automated checks run**
 
-2. Make changes and commit with conventional commits
+   CI runs formatting, linting, and tests
 
-3. Push to fork:
+2. **Maintainer reviews code**
 
-```bash
-git push origin feature/my-feature
-```
+   Reviews logic, tests, and documentation
 
-4. Open PR on GitHub with:
-   - Clear title describing the change
-   - Reference to related issues
-   - Description of what changed and why
-   - Test results if relevant
+3. **Address feedback**
 
-### PR Review
+   Make requested changes and push updates
 
-- Address review feedback
-- Keep commits clean (squash if requested)
-- Ensure CI remains green
+4. **Approval and merge**
+
+   Once approved, maintainer merges your PR
+
+</Steps>
+
+<Aside type="note" title="Review Timeline">
+Most PRs are reviewed within 2-3 days. Complex changes may take longer for thorough review.
+</Aside>
+
+---
 
 ## Release Process
 
-Releases are automated via GitHub Actions.
+<Badge text="Automated" variant="success" /> <Badge text="GitHub Actions" variant="tip" />
+
+Releases are fully automated via GitHub Actions. Maintainers trigger releases by creating tags.
 
 ### Creating a Release
 
-1. Tag commit:
+<Steps>
 
-```bash
-git tag v0.x.x
-git push origin v0.x.x
-```
+1. **Update version in `Cargo.toml`**
 
-2. GitHub Actions will:
-   - Run CI tests
-   - Build binaries (Linux x86_64, macOS ARM64)
-   - Build conda packages (rattler-build)
-   - Generate changelog (git-cliff)
-   - Create GitHub release with artifacts
+   ```toml
+   [package]
+   name = "ros2env"
+   version = "0.2.0"  # Increment version
+   ```
 
-### Release Checklist
+2. **Commit version bump**
 
-- [ ] All tests passing
-- [ ] Version updated in `Cargo.toml`
-- [ ] Documentation updated
-- [ ] Tag follows semver (v0.x.x)
+   ```bash
+   git add Cargo.toml
+   git commit -m "chore: bump version to 0.2.0"
+   ```
 
-## Project Structure
+3. **Create and push tag**
 
-<FileTree>
-- src/
-  - main.rs **849 lines - All application logic**
-- tests/
-  - integration_tests.rs **15 CLI integration tests**
-  - edge_cases.rs **14 filesystem edge case tests**
-- recipe/
-  - recipe.yaml **Conda package recipe (rattler-build)**
-- .github/workflows/
-  - ci.yml **Run tests, clippy, formatting**
-  - release.yml **Build and publish releases**
-  - deploy-docs.yml **Deploy documentation site**
-- docs/ **Documentation site (Astro Starlight)**
-- Cargo.toml **Package metadata**
-- README.md **Project overview**
-- LICENSE **MIT license**
-</FileTree>
+   ```bash
+   git tag v0.2.0
+   git push origin v0.2.0
+   ```
+
+4. **GitHub Actions automatically:**
+
+   - ✅ Runs CI tests
+   - ✅ Builds binaries (Linux x86_64, macOS ARM64)
+   - ✅ Builds conda packages (rattler-build)
+   - ✅ Generates changelog (git-cliff)
+   - ✅ Creates GitHub release with artifacts
+
+</Steps>
+
+<Aside type="caution" title="Maintainers Only">
+Only project maintainers can create releases. Contributors should submit PRs instead.
+</Aside>
+
+### Versioning
+
+We follow [Semantic Versioning](https://semver.org/):
+
+- **MAJOR** (0.x.0): Breaking changes
+- **MINOR** (0.x.0): New features (backward compatible)
+- **PATCH** (0.0.x): Bug fixes
+
+<Aside type="note" title="Pre-1.0 Status">
+Currently at version <Badge text="v0.1.0" variant="note" />. The API may change before reaching v1.0.0.
+</Aside>
+
+---
 
 ## Documentation
 
-Documentation is built with Astro Starlight.
+Documentation is built with <Badge text="Astro Starlight" variant="tip" />
 
 ### Local Development
 
-```bash
-cd docs
-pnpm install
-pnpm dev  # http://localhost:4321/ros2env/
-```
+<Steps>
 
-### Build Documentation
+1. **Navigate to docs directory**
 
-```bash
-pnpm build
-```
+   ```bash
+   cd docs
+   ```
 
-Documentation deploys automatically when changes are pushed to `main`.
+2. **Install dependencies**
+
+   ```bash
+   pnpm install
+   ```
+
+3. **Start dev server**
+
+   ```bash
+   pnpm dev
+   ```
+
+   Opens at: `http://localhost:4321/ros2env/`
+
+4. **Make changes**
+
+   Edit files in `src/content/docs/`
+
+5. **Build for production**
+
+   ```bash
+   pnpm build
+   ```
+
+</Steps>
+
+<Aside type="tip" title="Live Reload">
+The dev server automatically reloads when you save changes. Keep it running while editing docs!
+</Aside>
+
+### Documentation Guidelines
+
+<CardGrid>
+  <Card title="Clear Structure" icon="document">
+    - Use headings hierarchy (h2, h3, h4)
+    - Break content into digestible sections
+    - Add table of contents for long pages
+  </Card>
+  
+  <Card title="Visual Elements" icon="star">
+    - Use Cards for feature highlights
+    - Add Asides for tips and warnings
+    - Include Steps for tutorials
+    - Show code examples
+  </Card>
+  
+  <Card title="Examples" icon="open-book">
+    - Provide working code examples
+    - Show expected output
+    - Cover common use cases
+    - Include troubleshooting
+  </Card>
+  
+  <Card title="Cross-linking" icon="link">
+    - Link to related pages
+    - Reference other sections
+    - Use LinkCards for navigation
+    - Add "Next Steps" sections
+  </Card>
+</CardGrid>
+
+---
 
 ## Getting Help
 
-- **Bug Reports:** [Open an issue](https://github.com/alvgaona/ros2env/issues/new)
-- **Feature Requests:** [Open an issue](https://github.com/alvgaona/ros2env/issues/new)
-- **Questions:** Check existing issues or open a new one
+<CardGrid>
+  <LinkCard
+    title="📖 Read the Docs"
+    description="Comprehensive documentation at alvgaona.github.io/ros2env"
+    href="https://alvgaona.github.io/ros2env/"
+  />
+  <LinkCard
+    title="💬 Ask Questions"
+    description="Open an issue for questions or discussions"
+    href="https://github.com/alvgaona/ros2env/issues/new"
+  />
+  <LinkCard
+    title="🐛 Report Bugs"
+    description="Found a bug? Let us know with details"
+    href="https://github.com/alvgaona/ros2env/issues/new"
+  />
+  <LinkCard
+    title="✨ Feature Requests"
+    description="Propose new features or improvements"
+    href="https://github.com/alvgaona/ros2env/issues/new"
+  />
+</CardGrid>
 
-**Before opening an issue:**
-- Search existing issues
-- Include system information (OS, Rust version, rosenv version)
-- Provide reproducible example if applicable
+### Before Opening an Issue
+
+<Steps>
+
+1. **Search existing issues**
+
+   Your question may already be answered
+
+2. **Gather information**
+
+   - OS and version (macOS/Linux)
+   - rosenv version (`rosenv --version`)
+   - Rust version (`rustc --version`)
+   - Steps to reproduce
+
+3. **Create minimal example**
+
+   Simplify the problem to its core
+
+4. **Open detailed issue**
+
+   Include all relevant information
+
+</Steps>
+
+<Aside type="tip" title="Good Bug Reports">
+
+A good bug report includes:
+- **What you expected** to happen
+- **What actually happened**
+- **Steps to reproduce** the issue
+- **System information** (OS, versions)
+- **Error messages** (if any)
+
+</Aside>
+
+---
 
 ## Code of Conduct
 
-- Be professional and respectful
-- Focus on technical merit
-- Provide constructive feedback
-- Welcome newcomers
+<Aside type="note" title="Be Respectful">
 
-Thank you for contributing to ros2env!
+We're committed to providing a welcoming environment for all contributors. Please:
+
+- ✅ Be professional and respectful
+- ✅ Focus on technical merit
+- ✅ Provide constructive feedback
+- ✅ Welcome newcomers
+- ✅ Be patient with questions
+- ❌ No harassment or discrimination
+- ❌ No trolling or inflammatory comments
+
+</Aside>
+
+---
+
+## Thank You!
+
+<CardGrid>
+  <Card title="🎉 Your contributions matter!" icon="star">
+    Every contribution, no matter how small, helps make ros2env better for the ROS 2 community.
+  </Card>
+  <Card title="🚀 Ready to start?" icon="rocket">
+    Fork the repository, make your changes, and submit a PR. We're excited to see what you build!
+  </Card>
+</CardGrid>
+
+<LinkCard
+  title="🔗 View Project on GitHub"
+  description="github.com/alvgaona/ros2env"
+  href="https://github.com/alvgaona/ros2env"
+/>
+
+Thank you for contributing to ros2env! 🎉

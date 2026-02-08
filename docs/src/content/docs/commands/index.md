@@ -1,51 +1,293 @@
 ---
-title: Commands Reference
-description: Complete command reference for ros2env
+title: Commands Overview
+description: Complete reference for all rosenv commands
 ---
 
-## Command Overview
+import { Card, CardGrid, Aside, LinkCard } from '@astrojs/starlight/components';
 
-**ros2env** provides commands via the `rosenv` binary, organized into three categories:
+## Command Categories
 
-### Core Commands
+rosenv provides a comprehensive set of commands organized into three main categories:
 
-Commands for basic setup and information:
+<CardGrid>
+  <Card title="🎯 Core Commands" icon="star">
+    Essential commands for daily ROS 2 workflow
+    
+    - **list** - View available distributions
+    - **status** - Check active distribution
+    - **setup** - Initial symlink creation
+    
+    [View Core Commands →](/ros2env/commands/core/)
+  </Card>
+  
+  <Card title="🔄 Distribution Management" icon="random">
+    Activate, switch, and manage ROS 2 distributions
+    
+    - **activate** - Switch to a distribution
+    - **deactivate** - Exit ROS 2 environment
+    - **info** - Detailed distribution info
+    - **remove** - Delete distribution symlink
+    
+    [View Distribution Commands →](/ros2env/commands/distribution/)
+  </Card>
+  
+  <Card title="🛠️ Utility Commands" icon="setting">
+    Maintenance and configuration tools
+    
+    - **cleanup** - Remove all symlinks
+    - **refresh** - Update symlinks
+    - **init** - Shell integration setup
+    
+    [View Utility Commands →](/ros2env/commands/management/)
+  </Card>
+</CardGrid>
 
-- `rosenv setup` - Auto-detect and create symlinks
-- `rosenv list` - List available distributions
-- `rosenv status` - Show current active distribution
-- `rosenv doctor` - Verify installation
+---
 
-See [Core Commands](/ros2env/commands/core/) for details.
+## Quick Reference
 
-### Distribution Management
+### Most Used Commands
 
-Commands for working with distributions:
+```bash
+# View all available distributions
+rosenv list
 
-- `rosenv activate` - Activate a distribution
-- `rosenv deactivate` - Deactivate current distribution
-- `rosenv info` - Show distribution details
-- `rosenv remove` - Remove a symlink
+# Activate a distribution (requires shell integration)
+rosenv activate humble
 
-See [Distribution Management](/ros2env/commands/distribution/) for details.
+# Check what's currently active
+rosenv status
 
-### Utility Commands
+# View detailed info about a distribution
+rosenv info humble
 
-Additional management commands:
+# Deactivate current distribution
+rosenv deactivate
+```
 
-- `rosenv cleanup` - Remove all symlinks
-- `rosenv refresh` - Update all symlinks
-- `rosenv init` - Generate shell integration
-- `rosenv setup-guide` - Open setup guide
+<Aside type="tip" title="Shell Integration Required">
+Commands like `activate`, `deactivate`, and `status` require shell integration. Run `rosenv init <shell>` and add
+it to your shell config to enable these features.
+</Aside>
 
-See [Utility Commands](/ros2env/commands/management/) for details.
+---
 
 ## Command Syntax
 
-All commands follow the format:
+All rosenv commands follow this general pattern:
 
 ```bash
-rosenv <command> [arguments] [flags]
+rosenv <command> [arguments] [options]
 ```
 
-Use `rosenv --help` to see all available commands.
+### Getting Help
+
+Every command supports the `--help` flag:
+
+```bash
+# General help
+rosenv --help
+
+# Command-specific help
+rosenv activate --help
+rosenv list --help
+```
+
+---
+
+## Command Groups
+
+### Setup & Discovery
+
+Commands for initial setup and discovering distributions:
+
+<CardGrid>
+  <LinkCard
+    title="setup"
+    description="Create symlinks for all detected distributions"
+    href="/ros2env/commands/core/#rosenv-setup"
+  />
+  <LinkCard
+    title="list"
+    description="Show all available distributions"
+    href="/ros2env/commands/core/#rosenv-list"
+  />
+  <LinkCard
+    title="info"
+    description="Display detailed distribution information"
+    href="/ros2env/commands/distribution/#rosenv-info"
+  />
+</CardGrid>
+
+### Environment Management
+
+Commands for activating and switching between distributions:
+
+<CardGrid>
+  <LinkCard
+    title="activate"
+    description="Switch to a ROS 2 distribution"
+    href="/ros2env/commands/distribution/#rosenv-activate"
+  />
+  <LinkCard
+    title="deactivate"
+    description="Exit the current ROS 2 environment"
+    href="/ros2env/commands/distribution/#rosenv-deactivate"
+  />
+  <LinkCard
+    title="status"
+    description="Check the currently active distribution"
+    href="/ros2env/commands/core/#rosenv-status"
+  />
+</CardGrid>
+
+### Maintenance
+
+Commands for maintaining and updating your setup:
+
+<CardGrid>
+  <LinkCard
+    title="refresh"
+    description="Update symlinks after installing new distributions"
+    href="/ros2env/commands/management/#rosenv-refresh"
+  />
+  <LinkCard
+    title="cleanup"
+    description="Remove all distribution symlinks"
+    href="/ros2env/commands/management/#rosenv-cleanup"
+  />
+  <LinkCard
+    title="remove"
+    description="Remove a specific distribution symlink"
+    href="/ros2env/commands/distribution/#rosenv-remove"
+  />
+</CardGrid>
+
+### Configuration
+
+Commands for setting up shell integration:
+
+<CardGrid>
+  <LinkCard
+    title="init"
+    description="Generate shell integration code"
+    href="/ros2env/commands/management/#rosenv-init"
+  />
+</CardGrid>
+
+---
+
+## Common Workflows
+
+### Initial Setup
+
+```bash
+# 1. Install ROS 2 with pixi
+pixi global install --environment ros-humble-desktop \
+  -c robostack-humble ros-humble-desktop
+
+# 2. Create symlinks
+rosenv setup
+
+# 3. Add shell integration
+rosenv init zsh >> ~/.zshrc
+source ~/.zshrc
+
+# 4. Verify
+rosenv list
+```
+
+### Daily Usage
+
+```bash
+# Start working with ROS 2
+rosenv activate humble
+
+# Check your environment
+rosenv status
+
+# Work with ROS 2 tools
+ros2 run demo_nodes_cpp talker
+
+# Switch distributions
+rosenv activate jazzy
+
+# When done
+rosenv deactivate
+```
+
+### Adding New Distributions
+
+```bash
+# 1. Install with pixi
+pixi global install --environment ros-jazzy-desktop \
+  -c robostack-jazzy ros-jazzy-desktop
+
+# 2. Update rosenv
+rosenv refresh
+
+# 3. Verify
+rosenv list
+
+# 4. Activate new distribution
+rosenv activate jazzy
+```
+
+### Troubleshooting
+
+```bash
+# Check what distributions are available
+rosenv list
+
+# Get detailed info about a distribution
+rosenv info humble
+
+# Recreate all symlinks
+rosenv cleanup
+rosenv setup
+
+# Verify environment is clean
+rosenv status
+```
+
+---
+
+## Exit Codes
+
+rosenv uses standard exit codes:
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success |
+| `1` | General error (invalid arguments, command failed) |
+| `2` | Distribution not found |
+| `3` | Permission denied |
+| `4` | Shell integration not configured |
+
+<Aside type="note">
+You can check the exit code of the last command with `echo $?` in your shell.
+</Aside>
+
+---
+
+## Next Steps
+
+<CardGrid>
+  <Card title="📖 Core Commands" icon="star">
+    Learn about essential commands like `list`, `status`, and `setup`
+    
+    [Core Commands →](/ros2env/commands/core/)
+  </Card>
+  
+  <Card title="🔄 Distribution Management" icon="random">
+    Master activation, deactivation, and distribution info
+    
+    [Distribution Commands →](/ros2env/commands/distribution/)
+  </Card>
+  
+  <Card title="🛠️ Utility Commands" icon="setting">
+    Explore maintenance and configuration tools
+    
+    [Utility Commands →](/ros2env/commands/management/)
+  </Card>
+</CardGrid>

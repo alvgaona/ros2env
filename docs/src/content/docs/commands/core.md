@@ -1,99 +1,63 @@
 ---
 title: Core Commands
-description: Essential rosenv commands for setup and information
+description: Essential commands for daily ROS 2 workflow
 ---
 
-import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Code } from '@astrojs/starlight/components';
 
-## rosenv setup
+Core commands are the essential tools you'll use daily when working with ROS 2 distributions. These commands help you
+discover, verify, and set up your ROS 2 environments.
 
-Auto-detect pixi ROS installations and create symlinks.
-
-### Usage
-
-```bash
-rosenv setup
-```
-
-### Description
-
-Scans `~/.pixi/envs/` for directories matching the `ros-*-*` pattern, validates they contain ROS 2 setup files, and creates corresponding symlinks in `/opt/ros/`.
-
-### Prerequisites
-
-- `/opt/ros` must exist and be writable by current user
-- At least one ROS 2 distribution installed via pixi global
-
-### Example Output
-
-```
-Scanning ~/.pixi/envs for ROS 2 installations...
-
-Found distributions:
-  • ros-humble-desktop
-  • ros-jazzy-desktop
-
-Creating symlinks:
-  ✓ /opt/ros/humble → ~/.pixi/envs/ros-humble-desktop
-  ✓ /opt/ros/jazzy → ~/.pixi/envs/ros-jazzy-desktop
-
-Setup complete!
-```
-
-<Aside type="tip">
-Run `rosenv setup` after installing new ROS 2 distributions with pixi.
-</Aside>
+---
 
 ## rosenv list
 
-List available ROS 2 distributions.
+**Show all available ROS 2 distributions**
+
+Lists all ROS 2 distributions that rosenv has detected and configured with symlinks.
 
 ### Usage
 
 ```bash
-rosenv list [--names-only] [--short]
+rosenv list
 ```
 
-### Flags
+### Example Output
 
-- `--names-only` - Output only distribution names, one per line
-- `--short` - Output space-separated distribution names on single line
+```ansi
+Available ROS 2 distributions:
 
-### Examples
+  • humble  /opt/ros/humble
+  • jazzy   /opt/ros/jazzy
 
-<Tabs>
-  <TabItem label="Default">
-
-```bash
-$ rosenv list
-Available ROS distributions:
-  * humble (active)
-    jazzy
+Use 'rosenv activate <distro>' to activate a distribution
 ```
 
-  </TabItem>
-  <TabItem label="Names Only">
+<CardGrid>
+  <Card title="What it shows" icon="list-format">
+    - Distribution names (humble, jazzy, etc.)
+    - Symlink locations (`/opt/ros/<distro>`)
+    - Activation instructions
+  </Card>
+  <Card title="When to use" icon="information">
+    - Verify distributions are detected
+    - Check symlink status
+    - See what's available to activate
+  </Card>
+</CardGrid>
 
-```bash
-$ rosenv list --names-only
-humble
-jazzy
-```
+<Aside type="tip" title="No distributions listed?">
+If no distributions appear, run `rosenv setup` to create symlinks, or `rosenv refresh` if you just installed a new
+distribution.
+</Aside>
 
-  </TabItem>
-  <TabItem label="Short">
-
-```bash
-$ rosenv list --short
-humble jazzy
-```
-
-  </TabItem>
-</Tabs>
+---
 
 ## rosenv status
 
-Show current active distribution.
+**Check the currently active ROS 2 distribution**
+
+Shows which ROS 2 distribution is currently activated in your shell session, along with key environment variables.
 
 ### Usage
 
@@ -101,95 +65,214 @@ Show current active distribution.
 rosenv status
 ```
 
-### Description
-
-Displays information about the currently active ROS 2 distribution, including environment variables and setup file locations.
-
 ### Example Output
 
-When active:
+#### When a distribution is active
 
-```
-ROS 2 humble is active
+```ansi
+Active: ROS 2 humble
 
-Environment:
-  ROS_VERSION:       2
-  ROS_DISTRO:        humble
-  AMENT_PREFIX_PATH: /opt/ros/humble
-
-Setup file:
-  ✓ /opt/ros/humble/setup.zsh
+Key environment variables:
+  ROS_DISTRO=humble
+  ROS_VERSION=2
+  AMENT_PREFIX_PATH=/opt/ros/humble
+  CMAKE_PREFIX_PATH=/opt/ros/humble
 ```
 
-When inactive:
+#### When no distribution is active
 
-```
-No ROS 2 distribution active
+```ansi
+No ROS 2 distribution is currently active
 
-Available distributions:
-  - humble
-  - jazzy
-
-Activate: rosenv activate <distro>
+Run 'rosenv activate <distro>' to activate a distribution
 ```
 
-## rosenv doctor
+<Aside type="note" title="Shell Integration Required">
+This command requires shell integration. Run `rosenv init <shell>` and add it to your shell config to enable this
+feature.
 
-Verify installation and diagnose issues.
+```bash
+# For zsh
+rosenv init zsh >> ~/.zshrc
+
+# For bash
+rosenv init bash >> ~/.bashrc
+```
+</Aside>
+
+### What It Checks
+
+<CardGrid>
+  <Card title="ROS_DISTRO" icon="document">
+    The name of the active distribution (humble, jazzy, etc.)
+  </Card>
+  <Card title="ROS_VERSION" icon="information">
+    Should always be `2` for ROS 2
+  </Card>
+  <Card title="Path Variables" icon="open-book">
+    AMENT_PREFIX_PATH, CMAKE_PREFIX_PATH, and PYTHONPATH
+  </Card>
+</CardGrid>
+
+<Aside type="tip" title="Quick Environment Check">
+Use `rosenv status` before building or running ROS 2 projects to ensure you're using the correct distribution.
+</Aside>
+
+---
+
+## rosenv setup
+
+**Create symlinks for all detected distributions**
+
+Scans `~/.pixi/envs/` for ROS 2 installations and creates symlinks in `/opt/ros/` for each one found.
 
 ### Usage
 
 ```bash
-rosenv doctor
+rosenv setup
 ```
 
-### Description
+### What It Does
 
-Runs comprehensive diagnostics to verify:
-- `/opt/ros` directory exists and is writable
-- Symlinks are valid and point to existing directories
-- Setup files are present
-- Key directories (bin, lib, share) exist
+<Steps>
+
+1. **Scans for distributions**
+
+   Looks in `~/.pixi/envs/` for directories matching the pattern `ros-<distro>-desktop`
+
+2. **Creates symlinks**
+
+   For each found distribution, creates a symlink:
+   
+   ```
+   /opt/ros/<distro> → ~/.pixi/envs/ros-<distro>-desktop
+   ```
+
+3. **Reports results**
+
+   Shows which distributions were found and which symlinks were created
+
+</Steps>
 
 ### Example Output
 
-```
-Checking ROS 2 environment setup...
+```ansi
+Scanning for ROS 2 distributions in ~/.pixi/envs/...
 
-✓ /opt/ros directory exists
-✓ /opt/ros is writable
-✓ Found 2 distributions in /opt/ros
+Found distributions:
+  • humble
+  • jazzy
 
-Distribution: humble
-  ✓ Symlink valid
-  ✓ Target exists: ~/.pixi/envs/ros-humble-desktop
-  ✓ Setup files present
-  ✓ Binary and library directories exist
+Creating symlinks:
+  ✓ /opt/ros/humble → ~/.pixi/envs/ros-humble-desktop
+  ✓ /opt/ros/jazzy → ~/.pixi/envs/ros-jazzy-desktop
 
-Distribution: jazzy
-  ✓ Symlink valid
-  ✓ Target exists: ~/.pixi/envs/ros-jazzy-desktop
-  ✓ Setup files present
-  ✓ Binary and library directories exist
-
-All checks passed!
+Setup complete! Run 'rosenv list' to verify.
 ```
 
-### Common Issues
+<CardGrid>
+  <Card title="When to run" icon="rocket">
+    - **First time setup** after installing rosenv
+    - **After reinstalling** ROS 2 distributions
+    - **To recreate** symlinks if they were deleted
+  </Card>
+  <Card title="Safe to re-run" icon="approve-check">
+    Running `setup` multiple times is safe:
+    - Skips existing valid symlinks
+    - Updates broken or invalid symlinks
+    - Creates symlinks for new distributions
+  </Card>
+</CardGrid>
 
-<Aside type="caution" title="Permission Denied">
-If `/opt/ros` is not writable:
+### Troubleshooting
+
+<Aside type="caution" title="Permission denied?">
+
+Ensure `/opt/ros` exists and is owned by your user:
 
 ```bash
+sudo mkdir -p /opt/ros
 sudo chown $USER /opt/ros
 ```
+
 </Aside>
 
-<Aside type="caution" title="Broken Symlink">
-If symlinks are broken:
+<Aside type="caution" title="No distributions found?">
+
+Verify your pixi environments use the correct naming pattern:
 
 ```bash
-rosenv cleanup
-rosenv setup
+# List pixi environments
+ls ~/.pixi/envs/
+
+# Should see directories like:
+# ros-humble-desktop/
+# ros-jazzy-desktop/
 ```
+
+If your environments are named differently, rosenv won't detect them. Reinstall using the correct pattern:
+
+```bash
+pixi global install --environment ros-humble-desktop \
+  -c robostack-humble ros-humble-desktop
+```
+
 </Aside>
+
+---
+
+## Command Comparison
+
+| Command | Purpose | Requires Shell Integration |
+|---------|---------|---------------------------|
+| `list` | Show available distributions | No |
+| `status` | Check active distribution | Yes |
+| `setup` | Create initial symlinks | No |
+
+<Aside type="tip" title="Quick Workflow">
+
+```bash
+# 1. Install ROS 2 with pixi
+pixi global install --environment ros-humble-desktop \
+  -c robostack-humble ros-humble-desktop
+
+# 2. Create symlinks
+rosenv setup
+
+# 3. Verify
+rosenv list
+
+# 4. Add shell integration (one-time)
+rosenv init zsh >> ~/.zshrc
+source ~/.zshrc
+
+# 5. Activate and check status
+rosenv activate humble
+rosenv status
+```
+
+</Aside>
+
+---
+
+## Next Steps
+
+<CardGrid>
+  <Card title="🔄 Activate Distributions" icon="random">
+    Learn how to activate and switch between distributions
+    
+    [Distribution Management →](/ros2env/commands/distribution/)
+  </Card>
+  
+  <Card title="🛠️ Maintenance Tools" icon="setting">
+    Explore refresh, cleanup, and init commands
+    
+    [Utility Commands →](/ros2env/commands/management/)
+  </Card>
+  
+  <Card title="📖 Commands Overview" icon="open-book">
+    View all available commands
+    
+    [Commands Overview →](/ros2env/commands/)
+  </Card>
+</CardGrid>
