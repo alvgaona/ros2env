@@ -1,9 +1,17 @@
 [package]
-name = "rosenv"
+name = "ros2env"
 version = "0.1.0"
 edition = "2021"
-authors = ["Alvaro"]
-description = "ROS 2 distribution environment manager"
+authors = ["Alvaro Gaona"]
+description = "ROS 2 distribution environment manager for pixi global installations"
+repository = "https://github.com/alvgaona/ros2env"
+license = "MIT"
+keywords = ["ros", "ros2", "pixi", "robotics", "environment"]
+categories = ["command-line-utilities", "development-tools"]
+
+[[bin]]
+name = "rosenv"
+path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.5", features = ["derive", "cargo"] }

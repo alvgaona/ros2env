@@ -1,6 +1,9 @@
-# rosenv - ROS 2 Distribution Manager
+# ros2env - ROS 2 Distribution Manager
 
 A clean, simple CLI tool for managing multiple ROS 2 distributions on macOS (and Linux).
+
+**Command name:** `rosenv` (short and easy to type!)  
+**Project name:** `ros2env`
 
 ## Features
 
@@ -17,7 +20,7 @@ ROS 2's traditional installation expects `/opt/ros/<distro>` paths. When using p
 ## Installation
 
 ```bash
-cd ~/git/rosenv
+cd ~/git/ros2env
 cargo build --release
 cp target/release/rosenv ~/.local/bin/
 ```
