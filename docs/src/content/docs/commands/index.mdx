@@ -2,7 +2,7 @@
 title: Commands Overview
 description: Complete reference for all rosenv commands
 ---
-import { Card, CardGrid, Aside, LinkCard, Badge, Steps } from '@astrojs/starlight/components';
+import { Aside, Steps, Badge } from '@astrojs/starlight/components';
 
 ## Command Categories
 
@@ -11,38 +11,33 @@ import { Card, CardGrid, Aside, LinkCard, Badge, Steps } from '@astrojs/starligh
 
 rosenv provides a comprehensive set of commands organized into three main categories:
 
-<CardGrid>
-  <Card title="🎯 Core Commands" icon="star">
-    Essential commands for daily ROS 2 workflow
-    
-    - **list** - View available distributions
-    - **status** - Check active distribution
-    - **setup** - Initial symlink creation
-    
-    [View Core Commands →](/ros2env/commands/core/)
-  </Card>
-  
-  <Card title="🔄 Distribution Management" icon="random">
-    Activate, switch, and manage ROS 2 distributions
-    
-    - **activate** - Switch to a distribution
-    - **deactivate** - Exit ROS 2 environment
-    - **info** - Detailed distribution info
-    - **remove** - Delete distribution symlink
-    
-    [View Distribution Commands →](/ros2env/commands/distribution/)
-  </Card>
-  
-  <Card title="🛠️ Utility Commands" icon="setting">
-    Maintenance and configuration tools
-    
-    - **cleanup** - Remove all symlinks
-    - **refresh** - Update symlinks
-    - **init** - Shell integration setup
-    
-    [View Utility Commands →](/ros2env/commands/management/)
-  </Card>
-</CardGrid>
+### 🎯 Core Commands
+Essential commands for daily ROS 2 workflow
+
+- **[list](/ros2env/commands/core/#rosenv-list)** - View available distributions
+- **[status](/ros2env/commands/core/#rosenv-status)** - Check active distribution  
+- **[setup](/ros2env/commands/core/#rosenv-setup)** - Initial symlink creation
+
+[View Core Commands →](/ros2env/commands/core/)
+
+### 🔄 Distribution Management
+Activate, switch, and manage ROS 2 distributions
+
+- **[activate](/ros2env/commands/distribution/#rosenv-activate)** - Switch to a distribution
+- **[deactivate](/ros2env/commands/distribution/#rosenv-deactivate)** - Exit ROS 2 environment
+- **[info](/ros2env/commands/distribution/#rosenv-info)** - Detailed distribution info
+- **[remove](/ros2env/commands/distribution/#rosenv-remove)** - Delete distribution symlink
+
+[View Distribution Commands →](/ros2env/commands/distribution/)
+
+### 🛠️ Utility Commands
+Maintenance and configuration tools
+
+- **[cleanup](/ros2env/commands/management/#rosenv-cleanup)** - Remove all symlinks
+- **[refresh](/ros2env/commands/management/#rosenv-refresh)** - Update symlinks
+- **[init](/ros2env/commands/management/#rosenv-init)** - Shell integration setup
+
+[View Utility Commands →](/ros2env/commands/management/)
 
 ---
 
@@ -103,79 +98,31 @@ rosenv list --help
 
 Commands for initial setup and discovering distributions:
 
-<CardGrid>
-  <LinkCard
-    title="setup"
-    description="Create symlinks for all detected distributions"
-    href="/ros2env/commands/core/#rosenv-setup"
-  />
-  <LinkCard
-    title="list"
-    description="Show all available distributions"
-    href="/ros2env/commands/core/#rosenv-list"
-  />
-  <LinkCard
-    title="info"
-    description="Display detailed distribution information"
-    href="/ros2env/commands/distribution/#rosenv-info"
-  />
-</CardGrid>
+- **[setup](/ros2env/commands/core/#rosenv-setup)** - Create symlinks for all detected distributions
+- **[list](/ros2env/commands/core/#rosenv-list)** - Show all available distributions
+- **[info](/ros2env/commands/distribution/#rosenv-info)** - Display detailed distribution information
 
 ### Environment Management
 
 Commands for activating and switching between distributions:
 
-<CardGrid>
-  <LinkCard
-    title="activate"
-    description="Switch to a ROS 2 distribution"
-    href="/ros2env/commands/distribution/#rosenv-activate"
-  />
-  <LinkCard
-    title="deactivate"
-    description="Exit the current ROS 2 environment"
-    href="/ros2env/commands/distribution/#rosenv-deactivate"
-  />
-  <LinkCard
-    title="status"
-    description="Check the currently active distribution"
-    href="/ros2env/commands/core/#rosenv-status"
-  />
-</CardGrid>
+- **[activate](/ros2env/commands/distribution/#rosenv-activate)** - Switch to a ROS 2 distribution
+- **[deactivate](/ros2env/commands/distribution/#rosenv-deactivate)** - Exit the current ROS 2 environment
+- **[status](/ros2env/commands/core/#rosenv-status)** - Check the currently active distribution
 
 ### Maintenance
 
 Commands for maintaining and updating your setup:
 
-<CardGrid>
-  <LinkCard
-    title="refresh"
-    description="Update symlinks after installing new distributions"
-    href="/ros2env/commands/management/#rosenv-refresh"
-  />
-  <LinkCard
-    title="cleanup"
-    description="Remove all distribution symlinks"
-    href="/ros2env/commands/management/#rosenv-cleanup"
-  />
-  <LinkCard
-    title="remove"
-    description="Remove a specific distribution symlink"
-    href="/ros2env/commands/distribution/#rosenv-remove"
-  />
-</CardGrid>
+- **[refresh](/ros2env/commands/management/#rosenv-refresh)** - Update symlinks after installing new distributions
+- **[cleanup](/ros2env/commands/management/#rosenv-cleanup)** - Remove all distribution symlinks
+- **[remove](/ros2env/commands/distribution/#rosenv-remove)** - Remove a specific distribution symlink
 
 ### Configuration
 
 Commands for setting up shell integration:
 
-<CardGrid>
-  <LinkCard
-    title="init"
-    description="Generate shell integration code"
-    href="/ros2env/commands/management/#rosenv-init"
-  />
-</CardGrid>
+- **[init](/ros2env/commands/management/#rosenv-init)** - Generate shell integration code
 
 ---
 
@@ -339,22 +286,6 @@ You can check the exit code of the last command with `echo $?` in your shell.
 
 ## Next Steps
 
-<CardGrid>
-  <Card title="📖 Core Commands" icon="star">
-    Learn about essential commands like `list`, `status`, and `setup`
-    
-    [Core Commands →](/ros2env/commands/core/)
-  </Card>
-  
-  <Card title="🔄 Distribution Management" icon="random">
-    Master activation, deactivation, and distribution info
-    
-    [Distribution Commands →](/ros2env/commands/distribution/)
-  </Card>
-  
-  <Card title="🛠️ Utility Commands" icon="setting">
-    Explore maintenance and configuration tools
-    
-    [Utility Commands →](/ros2env/commands/management/)
-  </Card>
-</CardGrid>
+- **[📖 Core Commands](/ros2env/commands/core/)** - Learn about essential commands like `list`, `status`, and `setup`
+- **[🔄 Distribution Management](/ros2env/commands/distribution/)** - Master activation, deactivation, and distribution info
+- **[🛠️ Utility Commands](/ros2env/commands/management/)** - Explore maintenance and configuration tools

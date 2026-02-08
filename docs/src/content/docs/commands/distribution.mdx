@@ -2,7 +2,7 @@
 title: Distribution Management
 description: Commands for activating, switching, and managing ROS 2 distributions
 ---
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Badge, LinkButton } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Steps, Badge, LinkButton } from '@astrojs/starlight/components';
 
 <Badge text="4 Commands" variant="success" size="large" />
 <Badge text="Most Used" variant="tip" size="large" />
@@ -80,28 +80,28 @@ ros2 doctor 0.10.3
 
 When you activate a distribution, these variables are automatically configured:
 
-<CardGrid>
-  <Card title="Core Variables" icon="document">
-    - `ROS_DISTRO` - Distribution name
+
+  ### Core Variables
+- `ROS_DISTRO` - Distribution name
     - `ROS_VERSION` - Always `2` for ROS 2
     - `ROS_PYTHON_VERSION` - Python version (usually `3`)
-  </Card>
-  <Card title="Path Variables" icon="open-book">
-    - `AMENT_PREFIX_PATH` - Package search paths
+
+  ### Path Variables
+- `AMENT_PREFIX_PATH` - Package search paths
     - `CMAKE_PREFIX_PATH` - CMake package paths
     - `COLCON_PREFIX_PATH` - Colcon paths
     - `PYTHONPATH` - Python module paths
-  </Card>
-  <Card title="Library Paths" icon="rocket">
-    - `LD_LIBRARY_PATH` (Linux)
+
+  ### Library Paths
+- `LD_LIBRARY_PATH` (Linux)
     - `DYLD_LIBRARY_PATH` (macOS)
     - `PKG_CONFIG_PATH`
-  </Card>
-  <Card title="Binary Paths" icon="laptop">
-    - `PATH` - Adds `/opt/ros/<distro>/bin`
+
+  ### Binary Paths
+- `PATH` - Adds `/opt/ros/<distro>/bin`
     - Enables all ROS 2 CLI tools
-  </Card>
-</CardGrid>
+
+
 
 ### Switching Distributions
 
@@ -302,23 +302,23 @@ Key directories:
 
 ### What It Shows
 
-<CardGrid>
-  <Card title="Path Information" icon="open-book">
-    - Symlink location (`/opt/ros/<distro>`)
+
+  ### Path Information
+- Symlink location (`/opt/ros/<distro>`)
     - Target path (`~/.pixi/envs/...`)
     - Link type (symlink vs directory)
-  </Card>
-  <Card title="Setup Files" icon="document">
-    - Available shell setup scripts
+
+  ### Setup Files
+- Available shell setup scripts
     - setup.bash, setup.zsh, setup.sh
     - Indicates which are present
-  </Card>
-  <Card title="Directory Stats" icon="list-format">
-    - Key directories (bin, lib, share, include)
+
+  ### Directory Stats
+- Key directories (bin, lib, share, include)
     - Number of entries in each
     - Helps verify complete installation
-  </Card>
-</CardGrid>
+
+
 
 ### Use Cases
 
@@ -466,44 +466,44 @@ rosenv list
 
 ## Best Practices
 
-<CardGrid>
-  <Card title="✅ Always Verify" icon="approve-check">
-    Use `rosenv status` before building or running ROS 2 projects to confirm you're using the intended distribution.
-  </Card>
+
+  ### ✅ Always Verify
+Use `rosenv status` before building or running ROS 2 projects to confirm you're using the intended distribution.
+
   
-  <Card title="🔄 Clean Switches" icon="random">
-    When switching distributions, let `activate` handle the cleanup. No need to manually `deactivate` first.
-  </Card>
+  ### 🔄 Clean Switches
+When switching distributions, let `activate` handle the cleanup. No need to manually `deactivate` first.
+
   
-  <Card title="📊 Regular Checks" icon="list-format">
-    Run `rosenv info <distro>` periodically to verify your installations are healthy and complete.
-  </Card>
+  ### 📊 Regular Checks
+Run `rosenv info <distro>` periodically to verify your installations are healthy and complete.
+
   
-  <Card title="🎯 Single Active" icon="star">
-    Only activate one distribution per shell session to avoid conflicts and confusion.
-  </Card>
-</CardGrid>
+  ### 🎯 Single Active
+Only activate one distribution per shell session to avoid conflicts and confusion.
+
+
 
 ---
 
 ## Next Steps
 
-<CardGrid>
-  <Card title="🛠️ Utility Commands" icon="setting">
-    Learn about cleanup, refresh, and init commands
+
+  ### 🛠️ Utility Commands
+Learn about cleanup, refresh, and init commands
     
     [Utility Commands →](/ros2env/commands/management/)
-  </Card>
+
   
-  <Card title="📖 Core Commands" icon="star">
-    Master list, status, and setup commands
+  ### 📖 Core Commands
+Master list, status, and setup commands
     
     [Core Commands →](/ros2env/commands/core/)
-  </Card>
+
   
-  <Card title="📚 Commands Overview" icon="open-book">
-    See all available commands
+  ### 📚 Commands Overview
+See all available commands
     
     [Commands Overview →](/ros2env/commands/)
-  </Card>
-</CardGrid>
+
+

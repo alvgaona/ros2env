@@ -2,7 +2,7 @@
 title: Core Commands
 description: Essential commands for daily ROS 2 workflow
 ---
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Code, Badge, LinkButton } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Steps, Code, Badge, LinkButton } from '@astrojs/starlight/components';
 
 <Badge text="3 Commands" variant="success" size="large" />
 <Badge text="Essential" variant="tip" size="large" />
@@ -39,18 +39,18 @@ Available ROS 2 distributions:
 Use 'rosenv activate <distro>' to activate a distribution
 ```
 
-<CardGrid>
-  <Card title="What it shows" icon="list-format">
-    - Distribution names (humble, jazzy, etc.)
+
+  ### What it shows
+- Distribution names (humble, jazzy, etc.)
     - Symlink locations (`/opt/ros/<distro>`)
     - Activation instructions
-  </Card>
-  <Card title="When to use" icon="information">
-    - Verify distributions are detected
+
+  ### When to use
+- Verify distributions are detected
     - Check symlink status
     - See what's available to activate
-  </Card>
-</CardGrid>
+
+
 
 <Aside type="tip" title="No distributions listed?">
 If no distributions appear, run `rosenv setup` to create symlinks, or `rosenv refresh` if you just installed a new
@@ -108,17 +108,17 @@ rosenv init bash >> ~/.bashrc
 
 ### What It Checks
 
-<CardGrid>
-  <Card title="ROS_DISTRO" icon="document">
-    The name of the active distribution (humble, jazzy, etc.)
-  </Card>
-  <Card title="ROS_VERSION" icon="information">
-    Should always be `2` for ROS 2
-  </Card>
-  <Card title="Path Variables" icon="open-book">
-    AMENT_PREFIX_PATH, CMAKE_PREFIX_PATH, and PYTHONPATH
-  </Card>
-</CardGrid>
+
+  ### ROS_DISTRO
+The name of the active distribution (humble, jazzy, etc.)
+
+  ### ROS_VERSION
+Should always be `2` for ROS 2
+
+  ### Path Variables
+AMENT_PREFIX_PATH, CMAKE_PREFIX_PATH, and PYTHONPATH
+
+
 
 <Aside type="tip" title="Quick Environment Check">
 Use `rosenv status` before building or running ROS 2 projects to ensure you're using the correct distribution.
@@ -176,19 +176,19 @@ Creating symlinks:
 Setup complete! Run 'rosenv list' to verify.
 ```
 
-<CardGrid>
-  <Card title="When to run" icon="rocket">
-    - **First time setup** after installing rosenv
+
+  ### When to run
+- **First time setup** after installing rosenv
     - **After reinstalling** ROS 2 distributions
     - **To recreate** symlinks if they were deleted
-  </Card>
-  <Card title="Safe to re-run" icon="approve-check">
-    Running `setup` multiple times is safe:
+
+  ### Safe to re-run
+Running `setup` multiple times is safe:
     - Skips existing valid symlinks
     - Updates broken or invalid symlinks
     - Creates symlinks for new distributions
-  </Card>
-</CardGrid>
+
+
 
 ### Troubleshooting
 
@@ -272,22 +272,22 @@ rosenv status
 
 ## Next Steps
 
-<CardGrid>
-  <Card title="🔄 Activate Distributions" icon="random">
-    Learn how to activate and switch between distributions
+
+  ### 🔄 Activate Distributions
+Learn how to activate and switch between distributions
     
     [Distribution Management →](/ros2env/commands/distribution/)
-  </Card>
+
   
-  <Card title="🛠️ Maintenance Tools" icon="setting">
-    Explore refresh, cleanup, and init commands
+  ### 🛠️ Maintenance Tools
+Explore refresh, cleanup, and init commands
     
     [Utility Commands →](/ros2env/commands/management/)
-  </Card>
+
   
-  <Card title="📖 Commands Overview" icon="open-book">
-    View all available commands
+  ### 📖 Commands Overview
+View all available commands
     
     [Commands Overview →](/ros2env/commands/)
-  </Card>
-</CardGrid>
+
+

@@ -2,7 +2,7 @@
 title: Contributing
 description: Development guidelines and contribution process
 ---
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps, FileTree, LinkCard, Badge } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Steps, FileTree, LinkCard, Badge } from '@astrojs/starlight/components';
 
 ## Welcome Contributors!
 
@@ -11,20 +11,20 @@ import { Tabs, TabItem, Aside, Card, CardGrid, Steps, FileTree, LinkCard, Badge 
 We welcome contributions of all kinds: bug fixes, new features, documentation improvements, and more. This guide will
 help you get started with development.
 
-<CardGrid>
-  <Card title="🐛 Bug Reports" icon="warning">
-    Found a bug? [Open an issue](https://github.com/alvgaona/ros2env/issues/new) with details and reproduction steps.
-  </Card>
-  <Card title="✨ Feature Requests" icon="rocket">
-    Have an idea? [Start a discussion](https://github.com/alvgaona/ros2env/issues/new) to propose new features.
-  </Card>
-  <Card title="📖 Documentation" icon="document">
-    Improve docs by fixing typos, adding examples, or clarifying instructions.
-  </Card>
-  <Card title="🧪 Testing" icon="approve-check">
-    Add test cases, improve coverage, or report edge cases.
-  </Card>
-</CardGrid>
+
+  ### 🐛 Bug Reports
+Found a bug? [Open an issue](https://github.com/alvgaona/ros2env/issues/new) with details and reproduction steps.
+
+  ### ✨ Feature Requests
+Have an idea? [Start a discussion](https://github.com/alvgaona/ros2env/issues/new) to propose new features.
+
+  ### 📖 Documentation
+Improve docs by fixing typos, adding examples, or clarifying instructions.
+
+  ### 🧪 Testing
+Add test cases, improve coverage, or report edge cases.
+
+
 
 ---
 
@@ -32,16 +32,16 @@ help you get started with development.
 
 ### Prerequisites
 
-<CardGrid>
-  <Card title="Rust 1.92+" icon="rocket">
-    Install via [rustup](https://rustup.rs/)
+
+  ### Rust 1.92+
+Install via [rustup](https://rustup.rs/)
     
     ```bash
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     ```
-  </Card>
-  <Card title="Git" icon="github">
-    Version control for cloning and contributing
+
+  ### Git
+Version control for cloning and contributing
     
     ```bash
     # macOS
@@ -50,8 +50,8 @@ help you get started with development.
     # Linux (Ubuntu/Debian)
     sudo apt install git
     ```
-  </Card>
-</CardGrid>
+
+
 
 ### Clone the Repository
 
@@ -156,37 +156,37 @@ cargo test
 
 ### Test Categories
 
-<CardGrid>
-  <Card title="Unit Tests" icon="approve-check">
-    <Badge text="10 tests" variant="success" />
+
+  ### Unit Tests
+<Badge text="10 tests" variant="success" />
     
     Core functions and helpers in `src/main.rs`
     
     ```bash
     cargo test --bin rosenv
     ```
-  </Card>
+
   
-  <Card title="Edge Case Tests" icon="warning">
-    <Badge text="14 tests" variant="success" />
+  ### Edge Case Tests
+<Badge text="14 tests" variant="success" />
     
     Filesystem operations in `tests/edge_cases.rs`
     
     ```bash
     cargo test --test edge_cases
     ```
-  </Card>
+
   
-  <Card title="Integration Tests" icon="rocket">
-    <Badge text="15 tests" variant="success" />
+  ### Integration Tests
+<Badge text="15 tests" variant="success" />
     
     CLI commands in `tests/integration_tests.rs`
     
     ```bash
     cargo test --test integration_tests
     ```
-  </Card>
-</CardGrid>
+
+
 
 ### Advanced Testing
 
@@ -322,35 +322,35 @@ Then just run `precommit` before committing!
 
 ### Code Style
 
-<CardGrid>
-  <Card title="Naming Conventions" icon="document">
-    - **Functions**: `snake_case`
+
+  ### Naming Conventions
+- **Functions**: `snake_case`
     - **Types**: `CamelCase`
     - **Constants**: `SCREAMING_SNAKE_CASE`
     - Use descriptive names
-  </Card>
+
   
-  <Card title="Comments" icon="pencil">
-    - Use `//` for inline comments
+  ### Comments
+- Use `//` for inline comments
     - Use `/* */` for section headers only
     - No decorative dividers
     - Explain "why", not "what"
-  </Card>
+
   
-  <Card title="Function Design" icon="star">
-    - Single responsibility
+  ### Function Design
+- Single responsibility
     - Prefer &lt;50 lines
     - Use `Result<T>` for errors
     - Document public functions
-  </Card>
+
   
-  <Card title="Error Handling" icon="warning">
-    - Use `anyhow::Result`
+  ### Error Handling
+- Use `anyhow::Result`
     - Add context with `.context()`
     - User-friendly messages
     - Proper error propagation
-  </Card>
-</CardGrid>
+
+
 
 ### Testing Guidelines
 
@@ -693,40 +693,40 @@ The dev server automatically reloads when you save changes. Keep it running whil
 
 ### Documentation Guidelines
 
-<CardGrid>
-  <Card title="Clear Structure" icon="document">
-    - Use headings hierarchy (h2, h3, h4)
+
+  ### Clear Structure
+- Use headings hierarchy (h2, h3, h4)
     - Break content into digestible sections
     - Add table of contents for long pages
-  </Card>
+
   
-  <Card title="Visual Elements" icon="star">
-    - Use Cards for feature highlights
+  ### Visual Elements
+- Use Cards for feature highlights
     - Add Asides for tips and warnings
     - Include Steps for tutorials
     - Show code examples
-  </Card>
+
   
-  <Card title="Examples" icon="open-book">
-    - Provide working code examples
+  ### Examples
+- Provide working code examples
     - Show expected output
     - Cover common use cases
     - Include troubleshooting
-  </Card>
+
   
-  <Card title="Cross-linking" icon="link">
-    - Link to related pages
+  ### Cross-linking
+- Link to related pages
     - Reference other sections
     - Use LinkCards for navigation
     - Add "Next Steps" sections
-  </Card>
-</CardGrid>
+
+
 
 ---
 
 ## Getting Help
 
-<CardGrid>
+
   <LinkCard
     title="📖 Read the Docs"
     description="Comprehensive documentation at alvgaona.github.io/ros2env"
@@ -747,7 +747,7 @@ The dev server automatically reloads when you save changes. Keep it running whil
     description="Propose new features or improvements"
     href="https://github.com/alvgaona/ros2env/issues/new"
   />
-</CardGrid>
+
 
 ### Before Opening an Issue
 
@@ -807,14 +807,14 @@ We're committed to providing a welcoming environment for all contributors. Pleas
 
 ## Thank You!
 
-<CardGrid>
-  <Card title="🎉 Your contributions matter!" icon="star">
-    Every contribution, no matter how small, helps make ros2env better for the ROS 2 community.
-  </Card>
-  <Card title="🚀 Ready to start?" icon="rocket">
-    Fork the repository, make your changes, and submit a PR. We're excited to see what you build!
-  </Card>
-</CardGrid>
+
+  ### 🎉 Your contributions matter!
+Every contribution, no matter how small, helps make ros2env better for the ROS 2 community.
+
+  ### 🚀 Ready to start?
+Fork the repository, make your changes, and submit a PR. We're excited to see what you build!
+
+
 
 <LinkCard
   title="🔗 View Project on GitHub"

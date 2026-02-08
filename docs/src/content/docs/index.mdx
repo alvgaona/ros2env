@@ -2,7 +2,7 @@
 title: Getting Started
 description: Complete guide to installing and setting up ros2env
 ---
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Code, Badge, LinkButton, FileTree } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Steps, Badge, LinkButton, FileTree } from '@astrojs/starlight/components';
 
 <Badge text="v0.1.0" variant="success" size="large" />
 <Badge text="macOS & Linux" variant="note" size="large" />
@@ -13,21 +13,12 @@ import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Code, Badge, LinkButton, F
 **ros2env** is a ROS 2 distribution manager for [pixi](https://pixi.sh) global installations. It bridges the gap
 between pixi's environment management and ROS 2's traditional `/opt/ros/` structure.
 
-<CardGrid>
-  <Card title="🔗 Symlink Management" icon="link">
-    Automatically creates and maintains symlinks in `/opt/ros/` for full compatibility with ROS 2 tools and
-    tutorials.
-  </Card>
-  <Card title="🔄 Easy Switching" icon="random">
-    Switch between ROS 2 distributions instantly with automatic environment variable management.
-  </Card>
-  <Card title="🛡️ Environment Isolation" icon="shield">
-    Clean separation between distributions prevents conflicts and ensures reproducible builds.
-  </Card>
-  <Card title="🔍 Auto-Detection" icon="magnifier">
-    Automatically discovers ROS 2 installations in `~/.pixi/envs/` without manual configuration.
-  </Card>
-</CardGrid>
+### Key Features
+
+- **🔗 Symlink Management** - Automatically creates and maintains symlinks in `/opt/ros/` for full compatibility with ROS 2 tools and tutorials
+- **🔄 Easy Switching** - Switch between ROS 2 distributions instantly with automatic environment variable management
+- **🛡️ Environment Isolation** - Clean separation between distributions prevents conflicts and ensures reproducible builds
+- **🔍 Auto-Detection** - Automatically discovers ROS 2 installations in `~/.pixi/envs/` without manual configuration
 
 <Aside type="tip" title="Why use ros2env?">
 ROS 2 tools and tutorials expect distributions at `/opt/ros/<distro>`. When using pixi global for installations,
@@ -41,20 +32,18 @@ seamlessly.
 
 Before installing ros2env, ensure you have:
 
-<CardGrid>
-  <Card title="pixi" icon="package">
-    Install from [prefix.dev](https://prefix.dev/docs/pixi/installation)
-    
-    ```bash
-    curl -fsSL https://pixi.sh/install.sh | bash
-    ```
-  </Card>
-  <Card title="Shell" icon="laptop">
-    Supported shells:
-    - **zsh** (macOS default)
-    - **bash** (Linux default)
-  </Card>
-</CardGrid>
+### pixi
+
+Install from [prefix.dev](https://prefix.dev/docs/pixi/installation)
+
+```bash
+curl -fsSL https://pixi.sh/install.sh | bash
+```
+
+### Supported Shells
+
+- **zsh** (macOS default)
+- **bash** (Linux default)
 
 ---
 
@@ -316,35 +305,29 @@ Now you're ready to use rosenv! Here's a typical workflow:
 
 ## Common Tasks
 
-<CardGrid>
-  <Card title="📋 List distributions" icon="list-format">
-    ```bash
-    rosenv list
-    ```
-    Shows all available ROS 2 distributions and their symlink status.
-  </Card>
-  
-  <Card title="ℹ️ Distribution info" icon="information">
-    ```bash
-    rosenv info humble
-    ```
-    Displays detailed information about a specific distribution including setup files and directories.
-  </Card>
-  
-  <Card title="🔄 Refresh symlinks" icon="refresh">
-    ```bash
-    rosenv refresh
-    ```
-    Scans for new distributions and updates symlinks. Run after installing new distributions with pixi.
-  </Card>
-  
-  <Card title="🧹 Cleanup" icon="warning">
-    ```bash
-    rosenv cleanup
-    ```
-    Removes all distribution symlinks. The actual pixi installations remain untouched.
-  </Card>
-</CardGrid>
+### List distributions
+```bash
+rosenv list
+```
+Shows all available ROS 2 distributions and their symlink status.
+
+### Distribution info
+```bash
+rosenv info humble
+```
+Displays detailed information about a specific distribution including setup files and directories.
+
+### Refresh symlinks
+```bash
+rosenv refresh
+```
+Scans for new distributions and updates symlinks. Run after installing new distributions with pixi.
+
+### Cleanup
+```bash
+rosenv cleanup
+```
+Removes all distribution symlinks. The actual pixi installations remain untouched.
 
 ---
 
@@ -399,28 +382,23 @@ source ~/.zshrc              # or ~/.bashrc
 
 ## Next Steps
 
-<CardGrid stagger>
-  <Card title="📖 Commands Reference" icon="open-book">
-    Explore all available commands and their options
-    
-    <LinkButton href="/ros2env/commands/" variant="primary">
-      View Commands
-    </LinkButton>
-  </Card>
-  
-  <Card title="🤝 Contributing" icon="github">
-    Help improve ros2env by contributing code or documentation
-    
-    <LinkButton href="/ros2env/contributing/" variant="secondary">
-      Contributing Guide
-    </LinkButton>
-  </Card>
-  
-  <Card title="🐛 Report Issues" icon="warning">
-    Found a bug or have a feature request?
-    
-    <LinkButton href="https://github.com/alvgaona/ros2env/issues" variant="minimal">
-      Open an Issue
-    </LinkButton>
-  </Card>
-</CardGrid>
+### 📖 Commands Reference
+Explore all available commands and their options
+
+<LinkButton href="/ros2env/commands/" variant="primary">
+  View Commands
+</LinkButton>
+
+### 🤝 Contributing
+Help improve ros2env by contributing code or documentation
+
+<LinkButton href="/ros2env/contributing/" variant="secondary">
+  Contributing Guide
+</LinkButton>
+
+### 🐛 Report Issues
+Found a bug or have a feature request?
+
+<LinkButton href="https://github.com/alvgaona/ros2env/issues" variant="minimal">
+  Open an Issue
+</LinkButton>

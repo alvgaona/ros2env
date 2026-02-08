@@ -2,7 +2,7 @@
 title: Utility Commands
 description: Maintenance, configuration, and troubleshooting tools
 ---
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Badge, LinkButton } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Steps, Badge, LinkButton } from '@astrojs/starlight/components';
 
 <Badge text="6 Commands" variant="success" size="large" />
 <Badge text="Maintenance" variant="note" size="large" />
@@ -79,17 +79,17 @@ Cleanup only removes symlinks. Your actual pixi installations in `~/.pixi/envs/`
 
 ### When to Use
 
-<CardGrid>
-  <Card title="🔄 Fresh Start" icon="refresh">
-    Want to recreate all symlinks from scratch? Run `cleanup` then `setup`.
-  </Card>
-  <Card title="🐛 Troubleshooting" icon="warning">
-    Broken or incorrect symlinks? Cleanup removes them so you can start fresh.
-  </Card>
-  <Card title="🧹 Housekeeping" icon="approve-check">
-    Uninstalled distributions but symlinks remain? Cleanup removes orphaned links.
-  </Card>
-</CardGrid>
+
+  ### 🔄 Fresh Start
+Want to recreate all symlinks from scratch? Run `cleanup` then `setup`.
+
+  ### 🐛 Troubleshooting
+Broken or incorrect symlinks? Cleanup removes them so you can start fresh.
+
+  ### 🧹 Housekeeping
+Uninstalled distributions but symlinks remain? Cleanup removes orphaned links.
+
+
 
 ### Restoring After Cleanup
 
@@ -174,17 +174,17 @@ Refresh complete.
 
 ### When to Use
 
-<CardGrid>
-  <Card title="➕ New Installation" icon="add-document">
-    Just installed a new distribution with pixi? Run `refresh` to create its symlink.
-  </Card>
-  <Card title="🔄 Pixi Update" icon="random">
-    Updated distributions with pixi? Refresh ensures symlinks point to the right locations.
-  </Card>
-  <Card title="🔍 Verification" icon="magnifier">
-    Not sure if symlinks are up to date? Refresh checks and fixes any issues.
-  </Card>
-</CardGrid>
+
+  ### ➕ New Installation
+Just installed a new distribution with pixi? Run `refresh` to create its symlink.
+
+  ### 🔄 Pixi Update
+Updated distributions with pixi? Refresh ensures symlinks point to the right locations.
+
+  ### 🔍 Verification
+Not sure if symlinks are up to date? Refresh checks and fixes any issues.
+
+
 
 ### Workflow Example
 
@@ -300,20 +300,20 @@ source ~/.bashrc
 
 ### What It Provides
 
-<CardGrid>
-  <Card title="🎯 Direct Activation" icon="star">
-    Run `rosenv activate humble` directly without `eval` commands
-  </Card>
-  <Card title="🔄 Environment Switching" icon="random">
-    Switch distributions seamlessly with automatic cleanup
-  </Card>
-  <Card title="📊 Status Checking" icon="list-format">
-    Check active distribution with `rosenv status`
-  </Card>
-  <Card title="🔌 Deactivation" icon="approve-check">
-    Exit ROS 2 environment cleanly with `rosenv deactivate`
-  </Card>
-</CardGrid>
+
+  ### 🎯 Direct Activation
+Run `rosenv activate humble` directly without `eval` commands
+
+  ### 🔄 Environment Switching
+Switch distributions seamlessly with automatic cleanup
+
+  ### 📊 Status Checking
+Check active distribution with `rosenv status`
+
+  ### 🔌 Deactivation
+Exit ROS 2 environment cleanly with `rosenv deactivate`
+
+
 
 ### How It Works
 
@@ -573,44 +573,44 @@ source ~/.zshrc
 
 ## Best Practices
 
-<CardGrid>
-  <Card title="🔄 Regular Refresh" icon="refresh">
-    Run `rosenv refresh` after installing new distributions to keep symlinks up to date.
-  </Card>
+
+  ### 🔄 Regular Refresh
+Run `rosenv refresh` after installing new distributions to keep symlinks up to date.
+
   
-  <Card title="🧪 Test After Changes" icon="rocket">
-    After cleanup or refresh, verify with `rosenv list` and test activation with `rosenv activate`.
-  </Card>
+  ### 🧪 Test After Changes
+After cleanup or refresh, verify with `rosenv list` and test activation with `rosenv activate`.
+
   
-  <Card title="📝 Shell Integration Once" icon="document">
-    Add shell integration to your config file once. No need to re-run after shell restarts.
-  </Card>
+  ### 📝 Shell Integration Once
+Add shell integration to your config file once. No need to re-run after shell restarts.
+
   
-  <Card title="💾 Safe Cleanup" icon="shield">
-    Cleanup only removes symlinks, never pixi installations. Safe to use for troubleshooting.
-  </Card>
-</CardGrid>
+  ### 💾 Safe Cleanup
+Cleanup only removes symlinks, never pixi installations. Safe to use for troubleshooting.
+
+
 
 ---
 
 ## Next Steps
 
-<CardGrid>
-  <Card title="🔄 Distribution Management" icon="random">
-    Learn how to activate and manage distributions
+
+  ### 🔄 Distribution Management
+Learn how to activate and manage distributions
     
     [Distribution Commands →](/ros2env/commands/distribution/)
-  </Card>
+
   
-  <Card title="📖 Core Commands" icon="star">
-    Master essential commands like list and status
+  ### 📖 Core Commands
+Master essential commands like list and status
     
     [Core Commands →](/ros2env/commands/core/)
-  </Card>
+
   
-  <Card title="📚 Commands Overview" icon="open-book">
-    See all available commands
+  ### 📚 Commands Overview
+See all available commands
     
     [Commands Overview →](/ros2env/commands/)
-  </Card>
-</CardGrid>
+
+
