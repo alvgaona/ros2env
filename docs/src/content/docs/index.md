@@ -1,14 +1,16 @@
 ---
 title: Getting Started
-description: Install and configure rosenv for managing ROS 2 distributions
+description: Install and configure ros2env for managing ROS 2 distributions
 ---
 
 import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import { VERSION } from '../../version.ts';
 
 <Aside type="note">
-This guide is for rosenv v{VERSION}. Check [releases](https://github.com/alvgaona/ros2env/releases) for updates.
+This guide is for **ros2env** v{VERSION} (binary: `rosenv`). Check [releases](https://github.com/alvgaona/ros2env/releases) for updates.
 </Aside>
+
+**ros2env** is a ROS 2 distribution manager for pixi global installations. The binary is called `rosenv`.
 
 ## Prerequisites
 

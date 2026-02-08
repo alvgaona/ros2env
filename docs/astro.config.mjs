@@ -8,7 +8,7 @@ export default defineConfig({
 	base: '/ros2env',
 	integrations: [
 		starlight({
-			title: 'rosenv',
+			title: 'ros2env',
 			description: 'ROS 2 distribution manager for pixi global installations',
 			social: [
 				{
@@ -24,8 +24,7 @@ export default defineConfig({
 				{
 					label: 'Documentation',
 					items: [
-						{ label: 'Introduction', link: '/' },
-						{ label: 'Getting Started', link: '/getting-started/' },
+						{ label: 'Getting Started', link: '/' },
 						{
 							label: 'Commands',
 							collapsed: false,

@@ -7,6 +7,8 @@ import { Tabs, TabItem, Aside, FileTree } from '@astrojs/starlight/components';
 
 ## Development Setup
 
+**ros2env** is the project name. The binary is called `rosenv`.
+
 ### Prerequisites
 
 - Rust 1.92+ ([Install via rustup](https://rustup.rs/))
@@ -45,7 +47,7 @@ The binary will be at `target/release/rosenv`.
 
 ## Testing
 
-rosenv has 39 tests with ~54% line coverage and 78% function coverage.
+ros2env has 39 tests with ~54% line coverage and 78% function coverage.
 
 ### Run All Tests
 
@@ -311,4 +313,4 @@ Documentation deploys automatically when changes are pushed to `main`.
 - Provide constructive feedback
 - Welcome newcomers
 
-Thank you for contributing to rosenv!
+Thank you for contributing to ros2env!

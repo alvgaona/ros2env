@@ -1,11 +1,11 @@
 ---
 title: Commands Reference
-description: Complete command reference for rosenv
+description: Complete command reference for ros2env
 ---
 
 ## Command Overview
 
-rosenv provides commands organized into three categories:
+**ros2env** provides commands via the `rosenv` binary, organized into three categories:
 
 ### Core Commands
 
