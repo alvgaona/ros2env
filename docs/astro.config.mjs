@@ -11,6 +11,9 @@ export default defineConfig({
 		starlight({
 			title: 'ros2env',
 			description: 'ROS 2 distribution manager for pixi global installations',
+			logo: {
+				src: './public/ros2env-logo.png',
+			},
 			social: [
 				{
 					icon: 'github',
