@@ -1,83 +1,61 @@
 # ros2env - ROS 2 Distribution Manager
 
-A clean, simple CLI tool for managing multiple ROS 2 distributions on macOS (and Linux).
+CLI tool for managing multiple ROS 2 distributions installed via pixi global.
 
-**Command name:** `rosenv` (short and easy to type!)  
-**Project name:** `ros2env`
+**Binary:** `rosenv`  
+**Package:** `ros2env`
 
 ## Features
 
-- **Auto-detect** pixi ROS installations and create symlinks
-- **Easy switching** between ROS distributions
-- **Clean environment** management (no variable conflicts)
-- **Health checks** with `rosenv doctor`
-- **Minimal dependencies** - just Rust and clap
+- Auto-detect pixi ROS installations in `~/.pixi/envs/`
+- Create and manage symlinks in `/opt/ros/`
+- Switch between distributions with environment isolation
+- Verify installation with diagnostic commands
 
-## Why?
+## Overview
 
-ROS 2's traditional installation expects `/opt/ros/<distro>` paths. When using pixi global to install ROS 2, you need symlinks to maintain compatibility with standard ROS 2 workflows. `rosenv` automates this and provides clean distribution switching.
+ROS 2 tools expect distributions at `/opt/ros/<distro>`. When using pixi global for ROS 2 installations, this tool creates the necessary symlinks and manages environment variables for switching between distributions.
 
 ## Installation
 
+From source:
+
 ```bash
-cd ~/git/ros2env
 cargo build --release
 cp target/release/rosenv ~/.local/bin/
 ```
 
-Make sure `~/.local/bin` is in your PATH.
+Requires `~/.local/bin` in PATH.
 
-## Quick Start
+## Usage
 
-### 1. View Setup Guide (Recommended for First-Time Users)
+### Initial Setup
 
-```bash
-rosenv setup-guide
-```
-
-This opens the comprehensive [Setup Guide](SETUP_GUIDE.md) in your browser, including:
-- How to install pixi
-- How to install ROS 2 distributions with pixi global
-- Complete workflow examples
-- Management commands
-- Troubleshooting tips
-
-### 2. Setup Symlinks
-
-After installing ROS distributions with pixi global:
-
+1. Install ROS distributions via pixi:
 ```bash
 pixi global install --environment ros-humble-desktop -c robostack-staging ros-humble-desktop
-pixi global install --environment ros-jazzy-desktop -c robostack-staging ros-jazzy-desktop
 ```
 
-Run setup to create symlinks:
+2. Create `/opt/ros` with write permissions:
+```bash
+sudo mkdir -p /opt/ros
+sudo chown $USER /opt/ros
+```
 
+3. Create symlinks:
 ```bash
 rosenv setup
 ```
 
-This will:
-- Scan `~/.pixi/envs/` for ROS installations
-- Create symlinks in `/opt/ros/` (you may need to create this directory first)
-- Show next steps
-
-### 3. Add Shell Integration
-
-Generate shell integration code:
-
+4. Add shell integration:
 ```bash
 rosenv init zsh >> ~/.zshrc
 source ~/.zshrc
 ```
 
-### 4. Use rosenv
-
+5. Activate a distribution:
 ```bash
-rosenv activate humble    # Switch to Humble
-rosenv activate jazzy     # Switch to Jazzy
-rosenv status            # Show current status
-rosenv deactivate        # Deactivate ROS environment
+rosenv activate humble
 ```
 
 ## Commands
@@ -110,12 +88,12 @@ rosenv init zsh      # Generate zsh integration code
 rosenv init bash     # Generate bash integration code
 ```
 
-## How It Works
+## Implementation
 
-1. **Detection**: Scans `~/.pixi/envs/` for directories matching `ros-*-*` pattern
-2. **Symlinks**: Creates `/opt/ros/<distro>` → `~/.pixi/envs/ros-<distro>-desktop`
-3. **Switching**: Cleans old ROS environment variables before sourcing new distribution
-4. **Zero Duplication**: Symlinks use negligible disk space, pixi manages actual installations
+1. Scans `~/.pixi/envs/` for directories matching `ros-*-*` pattern
+2. Creates symlinks: `/opt/ros/<distro>` → `~/.pixi/envs/ros-<distro>-*`
+3. Unsets ROS environment variables before sourcing new distribution
+4. Sources distribution-specific setup scripts from `/opt/ros/<distro>`
 
 ## Architecture
 
@@ -129,127 +107,71 @@ rosenv init bash     # Generate bash integration code
 └── ros-jazzy-desktop/   (3.3GB - actual installation)
 ```
 
-## Permissions Setup
+## Common Operations
 
-`rosenv` needs `/opt/ros` to be writable. One-time setup:
-
+List distributions:
 ```bash
-sudo mkdir -p /opt/ros
-sudo chown $USER /opt/ros
+rosenv list
 ```
 
-Then `rosenv` works without sudo.
-
-## Examples
-
-### Basic Usage
-
+Switch distribution:
 ```bash
-# Check what's available
-rosenv list
-
-# Show current distribution
-rosenv status
-
-# Switch to Humble
 rosenv activate humble
-
-# Switch to Jazzy
 rosenv activate jazzy
+```
 
-# Deactivate ROS
+Deactivate:
+```bash
 rosenv deactivate
 ```
 
-### After Installing a New Distribution
-
+Add new distribution:
 ```bash
-# Install with pixi
 pixi global install --environment ros-iron -c robostack-staging ros-iron-desktop
-
-# Update symlinks
 rosenv refresh
 ```
 
-### Troubleshooting
-
+Verify installation:
 ```bash
-# Run diagnostics
 rosenv doctor
-
-# If symlinks are broken
-rosenv cleanup
-rosenv setup
 ```
 
-### Information
+## Pixi Integration
 
-```bash
-# Show details about Humble
-rosenv info humble
-
-# List just names (for scripting)
-rosenv list --names-only
-```
-
-## Integration with Pixi
-
-`rosenv` complements pixi, it doesn't wrap it:
-
-- **Pixi handles**: Installation, updates, package management
-- **rosenv handles**: Symlink management, distribution switching
+rosenv manages symlinks and environment switching. Pixi handles package installation and updates.
 
 ## Shell Integration
 
-The `rosenv init` command generates a comprehensive shell function that intercepts key commands:
+The `rosenv init` command generates a shell function that wraps the binary:
 
-- **`rosenv activate <distro>`** - Transparently activates a distribution
-- **`rosenv deactivate`** - Cleans up the ROS environment
-- **`rosenv status`** - Shows current shell status accurately
-- **Other commands** - Pass through to the binary
+- `rosenv activate <distro>` - Evaluates activation script in current shell
+- `rosenv deactivate` - Evaluates deactivation script in current shell
+- `rosenv status` - Checks current shell's `ROS_DISTRO` variable
+- Other commands - Pass through to binary
 
-This provides a conda-like experience where:
-1. Activation happens in the current shell (no manual `eval` needed)
-2. Status accurately reflects the current shell environment
-3. All environment cleanup is handled automatically
+This allows activation without manual `eval` commands.
 
 ## Environment Variables
 
-When switching, `rosenv` cleans these variables:
-- `AMENT_PREFIX_PATH`
-- `CMAKE_PREFIX_PATH`
-- `COLCON_PREFIX_PATH`
-- `PYTHONPATH`
-- `LD_LIBRARY_PATH` / `DYLD_LIBRARY_PATH`
+When switching distributions, these variables are unset:
+- `AMENT_PREFIX_PATH`, `CMAKE_PREFIX_PATH`, `COLCON_PREFIX_PATH`
+- `PYTHONPATH`, `LD_LIBRARY_PATH`, `DYLD_LIBRARY_PATH`
 - `PKG_CONFIG_PATH`
-- PATH (removes `/opt/ros/*` entries)
+- `PATH` (filters `/opt/ros/*` entries)
+- `ROS_DISTRO`, `ROS_VERSION`, `ROS_PYTHON_VERSION`
 
-Then sources the new distribution cleanly.
+The new distribution's setup script is then sourced.
 
-## Differences from Traditional ROS 2
+## Comparison
 
-| Feature | Traditional ROS 2 | rosenv + pixi |
-|---------|------------------|---------------|
+| Aspect | Traditional ROS 2 | rosenv + pixi |
+|--------|------------------|---------------|
 | Installation | apt/source build | pixi global |
-| Path | /opt/ros/<distro> | Same (via symlink) |
-| Switching | Manual sourcing | `rosenv activate <distro>` |
-| Cleanup | Manual | Automatic |
-| Deactivation | Manual unset | `rosenv deactivate` |
+| Path | /opt/ros/<distro> | /opt/ros/<distro> (symlink) |
+| Switching | Manual source | rosenv activate |
+| Environment cleanup | Manual | Automatic |
 | Updates | apt upgrade | pixi global update |
-| macOS Support | Build from source | Binary packages |
-
-## Contributing
-
-This is a personal tool but improvements welcome:
-- Better error messages
-- Additional platforms
-- Shell completion scripts
-- Config file support
 
 ## License
 
 MIT
-
-## Credits
-
-Built to solve the ROS 2 + pixi + macOS workflow challenges.
