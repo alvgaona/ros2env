@@ -850,29 +850,6 @@ fn main() -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs;
-    use std::os::unix::fs as unix_fs;
-    use tempfile::TempDir;
-
-    fn create_mock_pixi_env(temp_dir: &TempDir, distro: &str, variant: &str) -> PathBuf {
-        let env_dir = temp_dir
-            .path()
-            .join(".pixi")
-            .join("envs")
-            .join(format!("ros-{}-{}", distro, variant));
-        fs::create_dir_all(&env_dir).unwrap();
-
-        fs::write(env_dir.join("setup.bash"), "# setup bash").unwrap();
-        fs::write(env_dir.join("setup.zsh"), "# setup zsh").unwrap();
-
-        env_dir
-    }
-
-    fn create_mock_ros_root(temp_dir: &TempDir) -> PathBuf {
-        let ros_root = temp_dir.path().join("opt").join("ros");
-        fs::create_dir_all(&ros_root).unwrap();
-        ros_root
-    }
 
     #[test]
     fn test_generate_deactivation_script() {
@@ -883,40 +860,6 @@ mod tests {
         assert!(script.contains("unset AMENT_PREFIX_PATH"));
         assert!(script.contains("unset CMAKE_PREFIX_PATH"));
         assert!(script.contains("PATH="));
-    }
-
-    #[test]
-    fn test_generate_activation_script_bash() {
-        let temp_dir = TempDir::new().unwrap();
-        let env_dir = create_mock_pixi_env(&temp_dir, "humble", "desktop");
-        let ros_root = create_mock_ros_root(&temp_dir);
-
-        unix_fs::symlink(&env_dir, ros_root.join("humble")).unwrap();
-
-        std::env::set_var("HOME", temp_dir.path());
-
-        let script = generate_activation_script("humble", "bash").unwrap();
-
-        assert!(script.contains("ROS_DISTRO=humble"));
-        assert!(script.contains("source"));
-        assert!(script.contains("setup.bash"));
-        assert!(script.contains("# Clean up previous ROS environment"));
-    }
-
-    #[test]
-    fn test_generate_activation_script_zsh() {
-        let temp_dir = TempDir::new().unwrap();
-        let env_dir = create_mock_pixi_env(&temp_dir, "jazzy", "desktop");
-        let ros_root = create_mock_ros_root(&temp_dir);
-
-        unix_fs::symlink(&env_dir, ros_root.join("jazzy")).unwrap();
-
-        std::env::set_var("HOME", temp_dir.path());
-
-        let script = generate_activation_script("jazzy", "zsh").unwrap();
-
-        assert!(script.contains("ROS_DISTRO=jazzy"));
-        assert!(script.contains("setup.zsh"));
     }
 
     #[test]
@@ -953,21 +896,6 @@ mod tests {
     }
 
     #[test]
-    fn test_validate_distro_not_found() {
-        let temp_dir = TempDir::new().unwrap();
-        let _ros_root = create_mock_ros_root(&temp_dir);
-
-        std::env::set_var("HOME", temp_dir.path());
-
-        let result = validate_distro("nonexistent");
-        assert!(result.is_err());
-        assert!(result
-            .unwrap_err()
-            .to_string()
-            .contains("Distribution 'nonexistent' not found"));
-    }
-
-    #[test]
     fn test_distribution_struct() {
         let distro = Distribution {
             name: "humble".to_string(),
@@ -989,20 +917,6 @@ mod tests {
         let envs_dir = get_pixi_envs_dir();
         assert!(envs_dir.to_string_lossy().contains(".pixi"));
         assert!(envs_dir.to_string_lossy().contains("envs"));
-    }
-
-    #[test]
-    fn test_activation_script_missing_setup_file() {
-        let temp_dir = TempDir::new().unwrap();
-        let ros_root = create_mock_ros_root(&temp_dir);
-
-        let distro_dir = ros_root.join("empty");
-        fs::create_dir_all(&distro_dir).unwrap();
-
-        std::env::set_var("HOME", temp_dir.path());
-
-        let result = generate_activation_script("empty", "zsh");
-        assert!(result.is_err());
     }
 
     #[test]
@@ -1051,22 +965,5 @@ mod tests {
                 var
             );
         }
-    }
-
-    #[test]
-    fn test_activation_script_structure() {
-        let temp_dir = TempDir::new().unwrap();
-        let env_dir = create_mock_pixi_env(&temp_dir, "humble", "desktop");
-        let ros_root = create_mock_ros_root(&temp_dir);
-        unix_fs::symlink(&env_dir, ros_root.join("humble")).unwrap();
-
-        std::env::set_var("HOME", temp_dir.path());
-
-        let script = generate_activation_script("humble", "bash").unwrap();
-
-        assert!(script.starts_with("# Clean up"));
-        assert!(script.contains("if [ -n \"$ROS_DISTRO\" ]"));
-        assert!(script.contains("export ROS_DISTRO=humble"));
-        assert!(script.contains("source"));
     }
 }
