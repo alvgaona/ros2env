@@ -7,8 +7,8 @@ on:
       - "v*"
 
 jobs:
-  build:
-    name: Build
+  build-binaries:
+    name: Build Binaries
     strategy:
       fail-fast: false
       matrix:
@@ -53,9 +53,38 @@ jobs:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.artifact_name }}.tar.gz
 
+  build-conda:
+    name: Build Conda Package
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-64
+          - os: macos-latest
+            platform: osx-arm64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set version from tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "ROSENV_VERSION=${VERSION}" >> $GITHUB_ENV
+        shell: bash
+
+      - uses: prefix-dev/rattler-build-action@v0.2.22
+        with:
+          recipe-path: recipe/recipe.yaml
+          upload-artifact: true
+          artifact-name: rosenv-${{ matrix.platform }}-${{ github.run_attempt }}
+          build-args: --package-format tar-bz2
+
   release:
     name: Create Release
-    needs: build
+    needs: [build-binaries, build-conda]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -73,10 +102,18 @@ jobs:
       - name: Generate release notes
         run: git-cliff --latest --strip all > RELEASE_NOTES.md
 
-      - name: Download artifacts
+      - name: Download binary artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          pattern: rosenv-*-x86_64
+          path: binaries
+          merge-multiple: true
+
+      - name: Download conda artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: rosenv-*-*
+          path: conda-packages
           merge-multiple: true
 
       - name: Create GitHub Release
@@ -84,4 +121,6 @@ jobs:
         with:
           name: ${{ github.ref_name }}
           body_path: RELEASE_NOTES.md
-          files: artifacts/*.tar.gz
+          files: |
+            binaries/*.tar.gz
+            conda-packages/*.tar.bz2

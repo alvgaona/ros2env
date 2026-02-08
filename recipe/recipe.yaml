@@ -1,0 +1,49 @@
+context:
+  version: ${{ env.get("ROSENV_VERSION", default="0.1.0") }}
+
+recipe:
+  name: rosenv
+  version: ${{ version }}
+
+source:
+  path: ..
+
+build:
+  number: 0
+  script:
+    - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+    - if: unix
+      then:
+        - cargo install --locked --root $PREFIX --path .
+    - if: win
+      then:
+        - cargo install --locked --root %PREFIX% --path .
+
+requirements:
+  build:
+    - ${{ compiler('rust') }}
+    - cargo-bundle-licenses
+  host:
+    - openssl  # For HTTPS support in setup-guide
+  run:
+    - openssl
+
+tests:
+  - script:
+      - rosenv --version
+      - rosenv --help
+
+about:
+  homepage: https://github.com/alvgaona/ros2env
+  repository: https://github.com/alvgaona/ros2env
+  license: MIT
+  license_file: LICENSE
+  summary: ROS 2 distribution environment manager for pixi global installations
+  description: |
+    rosenv is a CLI tool for managing multiple ROS 2 distributions installed via pixi global.
+    It provides:
+    - Auto-detection of pixi ROS installations
+    - Symlink management in /opt/ros
+    - Easy switching between distributions
+    - conda-style shell integration
+    - Comprehensive setup guide
