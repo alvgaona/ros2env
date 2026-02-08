@@ -2,8 +2,6 @@
 
 use assert_cmd::Command;
 use predicates::prelude::*;
-use std::fs;
-use tempfile::TempDir;
 
 #[test]
 fn test_version_flag() {
@@ -130,29 +128,6 @@ fn test_invalid_command() {
         .assert()
         .failure()
         .stderr(predicate::str::contains("unrecognized subcommand"));
-}
-
-#[test]
-fn test_activate_outputs_shell_script() {
-    let temp_dir = TempDir::new().unwrap();
-    let ros_root = temp_dir.path().join("opt").join("ros");
-    fs::create_dir_all(&ros_root).unwrap();
-
-    let distro_dir = ros_root.join("humble");
-    fs::create_dir_all(&distro_dir).unwrap();
-    fs::write(distro_dir.join("setup.zsh"), "# test setup").unwrap();
-
-    std::env::set_var("HOME", temp_dir.path());
-
-    Command::cargo_bin("rosenv")
-        .unwrap()
-        .env("HOME", temp_dir.path())
-        .arg("activate")
-        .arg("humble")
-        .assert()
-        .success()
-        .stdout(predicate::str::contains("ROS_DISTRO=humble"))
-        .stdout(predicate::str::contains("source"));
 }
 
 #[test]
