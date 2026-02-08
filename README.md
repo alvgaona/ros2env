@@ -7,11 +7,11 @@ A clean, simple CLI tool for managing multiple ROS 2 distributions on macOS (and
 
 ## Features
 
-- 🔗 **Auto-detect** pixi ROS installations and create symlinks
-- 🔄 **Easy switching** between ROS distributions
-- 🧹 **Clean environment** management (no variable conflicts)
-- 🔍 **Health checks** with `rosenv doctor`
-- 📦 **Minimal dependencies** - just Rust and clap
+- **Auto-detect** pixi ROS installations and create symlinks
+- **Easy switching** between ROS distributions
+- **Clean environment** management (no variable conflicts)
+- **Health checks** with `rosenv doctor`
+- **Minimal dependencies** - just Rust and clap
 
 ## Why?
 
