@@ -3,10 +3,17 @@ title: Utility Commands
 description: Maintenance, configuration, and troubleshooting tools
 ---
 
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Badge, LinkButton } from '@astrojs/starlight/components';
+
+<Badge text="6 Commands" variant="success" size="large" />
+<Badge text="Maintenance" variant="note" size="large" />
 
 Utility commands help you maintain, configure, and troubleshoot your rosenv setup. Use these tools for shell
 integration, symlink maintenance, and system-wide operations.
+
+<LinkButton href="/ros2env/commands/" variant="secondary" icon="left-arrow">
+  ← Back to Commands Overview
+</LinkButton>
 
 ---
 
@@ -211,6 +218,14 @@ existing ones.
 | `refresh` | After adding new distributions with pixi |
 
 Both commands are safe to run multiple times, but `refresh` provides more detailed reporting about changes.
+
+<Aside type="note" title="Setup vs Refresh">
+**setup**: Creates all symlinks from scratch, best for first-time configuration
+
+**refresh**: Scans for changes and updates incrementally, best for adding new distributions
+
+Both are idempotent and safe to run multiple times!
+</Aside>
 
 ---
 

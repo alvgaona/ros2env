@@ -3,9 +3,12 @@ title: Commands Overview
 description: Complete reference for all rosenv commands
 ---
 
-import { Card, CardGrid, Aside, LinkCard } from '@astrojs/starlight/components';
+import { Card, CardGrid, Aside, LinkCard, Badge, Steps } from '@astrojs/starlight/components';
 
 ## Command Categories
+
+<Badge text="13 Commands" variant="success" size="large" />
+<Badge text="3 Categories" variant="note" size="large" />
 
 rosenv provides a comprehensive set of commands organized into three main categories:
 
@@ -181,74 +184,139 @@ Commands for setting up shell integration:
 
 ### Initial Setup
 
-```bash
-# 1. Install ROS 2 with pixi
-pixi global install --environment ros-humble-desktop \
-  -c robostack-humble ros-humble-desktop
+<Steps>
 
-# 2. Create symlinks
-rosenv setup
+1. **Install ROS 2 with pixi**
 
-# 3. Add shell integration
-rosenv init zsh >> ~/.zshrc
-source ~/.zshrc
+   ```bash
+   pixi global install --environment ros-humble-desktop \
+     -c robostack-humble ros-humble-desktop
+   ```
 
-# 4. Verify
-rosenv list
-```
+2. **Create symlinks**
+
+   ```bash
+   rosenv setup
+   ```
+
+3. **Add shell integration**
+
+   ```bash
+   rosenv init zsh >> ~/.zshrc
+   source ~/.zshrc
+   ```
+
+4. **Verify installation**
+
+   ```bash
+   rosenv list
+   ```
+
+</Steps>
 
 ### Daily Usage
 
-```bash
-# Start working with ROS 2
-rosenv activate humble
+<Steps>
 
-# Check your environment
-rosenv status
+1. **Start working with ROS 2**
 
-# Work with ROS 2 tools
-ros2 run demo_nodes_cpp talker
+   ```bash
+   rosenv activate humble
+   ```
 
-# Switch distributions
-rosenv activate jazzy
+2. **Check your environment**
 
-# When done
-rosenv deactivate
-```
+   ```bash
+   rosenv status
+   ```
+
+3. **Work with ROS 2 tools**
+
+   ```bash
+   ros2 run demo_nodes_cpp talker
+   ```
+
+4. **Switch distributions** (if needed)
+
+   ```bash
+   rosenv activate jazzy
+   ```
+
+5. **Deactivate when done**
+
+   ```bash
+   rosenv deactivate
+   ```
+
+</Steps>
 
 ### Adding New Distributions
 
-```bash
-# 1. Install with pixi
-pixi global install --environment ros-jazzy-desktop \
-  -c robostack-jazzy ros-jazzy-desktop
+<Steps>
 
-# 2. Update rosenv
-rosenv refresh
+1. **Install with pixi**
 
-# 3. Verify
-rosenv list
+   ```bash
+   pixi global install --environment ros-jazzy-desktop \
+     -c robostack-jazzy ros-jazzy-desktop
+   ```
 
-# 4. Activate new distribution
-rosenv activate jazzy
-```
+2. **Update rosenv**
+
+   ```bash
+   rosenv refresh
+   ```
+
+3. **Verify detection**
+
+   ```bash
+   rosenv list
+   ```
+
+4. **Activate new distribution**
+
+   ```bash
+   rosenv activate jazzy
+   ```
+
+</Steps>
 
 ### Troubleshooting
 
-```bash
-# Check what distributions are available
-rosenv list
+<Steps>
 
-# Get detailed info about a distribution
-rosenv info humble
+1. **Check available distributions**
 
-# Recreate all symlinks
-rosenv cleanup
-rosenv setup
+   ```bash
+   rosenv list
+   ```
 
-# Verify environment is clean
-rosenv status
-```
+2. **Get detailed distribution info**
+
+   ```bash
+   rosenv info humble
+   ```
+
+3. **Recreate all symlinks**
+
+   ```bash
+   rosenv cleanup
+   rosenv setup
+   ```
+
+4. **Verify environment is clean**
+
+   ```bash
+   rosenv status
+   ```
+
+</Steps>
+
+<Aside type="tip" title="Common Issues">
+- **Distribution not detected?** Ensure pixi environment follows `ros-<distro>-desktop` naming
+- **Permission denied?** Check `/opt/ros` is owned by your user: `sudo chown $USER /opt/ros`
+- **Activation not working?** Verify shell integration: `type rosenv` should show "shell function"
+</Aside>
 
 ---
 

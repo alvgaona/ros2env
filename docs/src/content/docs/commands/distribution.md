@@ -3,10 +3,17 @@ title: Distribution Management
 description: Commands for activating, switching, and managing ROS 2 distributions
 ---
 
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Badge, LinkButton } from '@astrojs/starlight/components';
+
+<Badge text="4 Commands" variant="success" size="large" />
+<Badge text="Most Used" variant="tip" size="large" />
 
 Distribution management commands let you activate, switch between, and manage your ROS 2 distributions. These are the
 commands you'll use most frequently in your day-to-day ROS 2 workflow.
+
+<LinkButton href="/ros2env/commands/" variant="secondary" icon="left-arrow">
+  ← Back to Commands Overview
+</LinkButton>
 
 <Aside type="note" title="Shell Integration Required">
 The `activate`, `deactivate`, and `status` commands require shell integration. Run `rosenv init <shell>` and add it
@@ -410,6 +417,11 @@ rosenv setup
 # Or refresh to scan for changes
 rosenv refresh
 ```
+
+<Aside type="tip" title="Accidental Removal Recovery">
+Don't worry if you accidentally remove a symlink! The pixi installation is never touched, so you can always recreate
+the symlink with `rosenv setup` or `rosenv refresh`.
+</Aside>
 
 ---
 

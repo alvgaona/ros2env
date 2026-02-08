@@ -3,10 +3,17 @@ title: Core Commands
 description: Essential commands for daily ROS 2 workflow
 ---
 
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Code } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Code, Badge, LinkButton } from '@astrojs/starlight/components';
+
+<Badge text="3 Commands" variant="success" size="large" />
+<Badge text="Essential" variant="tip" size="large" />
 
 Core commands are the essential tools you'll use daily when working with ROS 2 distributions. These commands help you
 discover, verify, and set up your ROS 2 environments.
+
+<LinkButton href="/ros2env/commands/" variant="secondary" icon="left-arrow">
+  ← Back to Commands Overview
+</LinkButton>
 
 ---
 
@@ -228,6 +235,15 @@ pixi global install --environment ros-humble-desktop \
 | `list` | Show available distributions | No |
 | `status` | Check active distribution | Yes |
 | `setup` | Create initial symlinks | No |
+
+<Aside type="note" title="Command Categories">
+These three core commands form the foundation of rosenv:
+- **list** - Discovery (find what's available)
+- **status** - Verification (confirm what's active)  
+- **setup** - Configuration (create the symlinks)
+
+All other commands build upon these basics.
+</Aside>
 
 <Aside type="tip" title="Quick Workflow">
 

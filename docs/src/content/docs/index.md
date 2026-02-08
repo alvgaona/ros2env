@@ -3,7 +3,11 @@ title: Getting Started
 description: Complete guide to installing and setting up ros2env
 ---
 
-import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Code } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside, Card, CardGrid, Steps, Code, Badge, LinkButton, FileTree } from '@astrojs/starlight/components';
+
+<Badge text="v0.1.0" variant="success" size="large" />
+<Badge text="macOS & Linux" variant="note" size="large" />
+<Badge text="Humble & Jazzy" variant="tip" size="large" />
 
 ## What is ros2env?
 
@@ -153,6 +157,18 @@ approximately 1GB, expanding to 3.3GB on disk.
 ## Setup rosenv
 
 After installing at least one ROS 2 distribution, configure rosenv to manage your environments.
+
+<Aside type="note" title="What rosenv Creates">
+rosenv creates symlinks in `/opt/ros/` that point to your pixi environments. Here's the resulting structure:
+
+<FileTree>
+
+- /opt/ros/
+  - humble/ → /Users/you/.pixi/envs/ros-humble-desktop/ (symlink)
+  - jazzy/ → /Users/you/.pixi/envs/ros-jazzy-desktop/ (symlink)
+
+</FileTree>
+</Aside>
 
 <Steps>
 
@@ -388,18 +404,24 @@ source ~/.zshrc              # or ~/.bashrc
   <Card title="📖 Commands Reference" icon="open-book">
     Explore all available commands and their options
     
-    [View Commands →](/ros2env/commands/)
+    <LinkButton href="/ros2env/commands/" variant="primary">
+      View Commands
+    </LinkButton>
   </Card>
   
   <Card title="🤝 Contributing" icon="github">
     Help improve ros2env by contributing code or documentation
     
-    [Contributing Guide →](/ros2env/contributing/)
+    <LinkButton href="/ros2env/contributing/" variant="secondary">
+      Contributing Guide
+    </LinkButton>
   </Card>
   
   <Card title="🐛 Report Issues" icon="warning">
     Found a bug or have a feature request?
     
-    [Open an Issue →](https://github.com/alvgaona/ros2env/issues)
+    <LinkButton href="https://github.com/alvgaona/ros2env/issues" variant="minimal">
+      Open an Issue
+    </LinkButton>
   </Card>
 </CardGrid>
