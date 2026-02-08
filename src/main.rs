@@ -816,7 +816,7 @@ fn main() -> Result<()> {
             // Detect shell from parent process or default to bash
             let shell = std::env::var("SHELL")
                 .ok()
-                .and_then(|s| s.split('/').last().map(String::from))
+                .and_then(|s| s.split('/').next_back().map(String::from))
                 .unwrap_or_else(|| "bash".to_string());
 
             match generate_activation_script(&distro, &shell) {
