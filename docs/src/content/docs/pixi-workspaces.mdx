@@ -1,0 +1,129 @@
+---
+title: Using rosenv with Pixi Workspaces
+description: How to configure Pixi workspaces to work seamlessly with global ROS distributions
+---
+
+## Problem
+
+When you activate a global ROS distribution with `rosenv activate <distro>` and then enter a Pixi workspace with `pixi shell`, Pixi overwrites environment variables like `AMENT_PREFIX_PATH`, losing access to the global ROS installation.
+
+This means packages from the global ROS distribution become unavailable in your local workspace.
+
+## Solution
+
+Use Pixi's activation scripts to preserve and append the global ROS paths. This ensures both your local workspace packages and global ROS packages are available.
+
+### Step 1: Create an Activation Script
+
+In your Pixi workspace root, create a file named `activation.sh`:
+
+```bash
+#!/bin/bash
+
+# Pixi workspace activation script for rosenv
+# This script integrates global ROS distributions with local pixi workspaces
+
+# Check if rosenv is available
+if ! command -v rosenv &> /dev/null; then
+    echo "Warning: rosenv command not found. Install rosenv first." >&2
+    echo "Visit: https://github.com/alvgaona/ros2env" >&2
+    return 1
+fi
+
+# Generate and execute the activation script
+eval "$(rosenv pixi activate)"
+```
+
+Make the script executable:
+
+```bash
+chmod +x activation.sh
+```
+
+### Step 2: Configure pixi.toml
+
+Update your `pixi.toml` to use the activation script:
+
+```toml
+[activation]
+scripts = ["activation.sh"]
+```
+
+### Step 3: Usage
+
+Now you can use rosenv and Pixi together seamlessly:
+
+```bash
+# Activate global ROS distribution
+rosenv activate humble
+
+# Enter your pixi workspace
+cd ~/my_ros_workspace
+pixi shell
+
+# Both environments are now available!
+# Local workspace packages take priority
+# Global ROS packages are available as fallback
+```
+
+### How It Works
+
+1. **rosenv** sets up the global ROS environment (e.g., `/opt/ros/humble`)
+2. **pixi shell** overwrites environment variables with local paths (e.g., `.pixi/envs/default`)
+3. **activation.sh** runs automatically and calls `rosenv pixi activate`
+4. **rosenv pixi activate** detects:
+   - If pixi has ROS installed, which distribution it is
+   - If global ROS is active, which distribution it is
+   - Whether distributions match or conflict
+5. Based on detection:
+   - **Matching distributions** (e.g., both Humble): Appends global paths as fallback
+   - **Mismatched distributions** (e.g., Humble vs Jazzy): Cleans up conflicting paths to avoid Python version conflicts
+   - **No ROS in pixi**: Uses global ROS distribution
+6. Final `AMENT_PREFIX_PATH`: `<local>:<global>` (when distributions match)
+
+### Example: Matching Distributions
+
+```bash
+$ rosenv activate humble
+Activated ROS 2 humble
+
+$ echo $AMENT_PREFIX_PATH
+/opt/ros/humble
+
+$ cd ~/workspace/ros2_ws  # Has ROS Humble in pixi
+$ pixi shell
+
+# After activation.sh runs automatically:
+$ echo $AMENT_PREFIX_PATH
+/home/user/workspace/ros2_ws/.pixi/envs/default:/opt/ros/humble
+```
+
+### Example: Mismatched Distributions
+
+```bash
+$ rosenv activate jazzy
+Activated ROS 2 jazzy
+
+$ cd ~/workspace/ros2_ws  # Has ROS Humble in pixi
+$ pixi shell
+
+# activation.sh detects mismatch:
+⚠ Skipping global ROS jazzy (pixi has ROS humble)
+
+# PYTHONPATH is cleaned to avoid Python 3.11 vs 3.12 conflicts
+# Only the pixi Humble environment is active
+```
+
+## Alternative: Per-Feature Activation
+
+If you have multiple Pixi features (e.g., different ROS distributions), you can create feature-specific activation scripts:
+
+```toml
+[feature.humble.activation]
+scripts = ["activation-humble.sh"]
+
+[feature.jazzy.activation]
+scripts = ["activation-jazzy.sh"]
+```
+
+Then modify each script to target the specific distribution.
