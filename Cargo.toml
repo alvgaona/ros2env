@@ -2,12 +2,14 @@
 name = "ros2env"
 version = "0.1.0"
 edition = "2021"
-authors = ["Alvaro Gaona"]
-description = "ROS 2 distribution environment manager for pixi global installations"
+authors = ["Alvaro J. Gaona"]
+description = "ROS 2 distribution environment manager for Pixi global installations"
 repository = "https://github.com/alvgaona/ros2env"
-license = "MIT"
+license-file = "LICENSE"
 keywords = ["ros", "ros2", "pixi", "robotics", "environment"]
 categories = ["command-line-utilities", "development-tools"]
+readme = "README.md"
+homepage = "https://alvgaona.gitbook.io/ros2env"
 
 [[bin]]
 name = "rosenv"

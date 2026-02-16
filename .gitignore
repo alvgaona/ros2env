@@ -1,6 +1,10 @@
 target/
 output/
 
+# Markdown
+*.md
+!README.md
+
 # Documentation site (Astro Starlight)
 docs/node_modules/
 docs/dist/
