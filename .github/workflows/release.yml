@@ -39,31 +39,18 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            use_cross: false
-          - os: ubuntu-latest
+          - os: ubuntu-24.04-arm
             target: aarch64-unknown-linux-gnu
-            use_cross: true
           - os: macos-latest
             target: aarch64-apple-darwin
-            use_cross: false
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
-      - name: Install cross
-        if: matrix.use_cross
-        run: cargo install cross --git https://github.com/cross-rs/cross
-      - name: Build
-        run: |
-          if [ "${{ matrix.use_cross }}" = "true" ]; then
-            cross build --release --target ${{ matrix.target }}
-          else
-            cargo build --release --target ${{ matrix.target }}
-          fi
+      - run: cargo build --release --target ${{ matrix.target }}
       - name: Strip binary
-        if: ${{ !matrix.use_cross }}
         run: strip target/${{ matrix.target }}/release/rosenv
       - name: Create tarball
         run: |
@@ -82,13 +69,10 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux-64
-            extra_args: ""
-          - os: ubuntu-latest
+          - os: ubuntu-24.04-arm
             platform: linux-aarch64
-            extra_args: --no-test
           - os: macos-latest
             platform: osx-arm64
-            extra_args: ""
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -99,7 +83,7 @@ jobs:
           recipe-path: recipe/recipe.yaml
           upload-artifact: true
           artifact-name: rosenv-conda-${{ matrix.platform }}
-          build-args: --target-platform ${{ matrix.platform }} --package-format tar-bz2 ${{ matrix.extra_args }}
+          build-args: --target-platform ${{ matrix.platform }} --package-format tar-bz2
       - name: Upload to prefix.dev
         run: |
           for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \)); do
