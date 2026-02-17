@@ -293,42 +293,69 @@ fn remove_symlink(distro: &str) -> Result<()> {
     Ok(())
 }
 
-fn generate_activation_script(distro: &str, shell: &str) -> Result<String> {
+fn generate_activation_script(distro: &str, _shell: &str) -> Result<String> {
     let distro_path = validate_distro(distro)?;
+    let ros_root = distro_path.display().to_string();
 
-    let setup_file = match shell {
-        "zsh" => "setup.zsh",
-        "bash" => "setup.bash",
-        _ => "setup.sh",
-    };
-
-    let setup_path = distro_path.join(setup_file);
-    if !setup_path.exists() {
-        anyhow::bail!("Setup file not found: {}", setup_path.display());
-    }
-
-    // Generate cleanup and activation commands
     let mut script = String::new();
 
-    // Clean up previous ROS environment
-    script.push_str("# Clean up previous ROS environment\n");
-    script.push_str("if [ -n \"$ROS_DISTRO\" ]; then\n");
     script.push_str(
-        "  export PATH=$(echo $PATH | tr ':' '\\n' | grep -v '/opt/ros/' | tr '\\n' ':')\n",
-    );
-    script.push_str("  unset AMENT_PREFIX_PATH\n");
-    script.push_str("  unset CMAKE_PREFIX_PATH\n");
-    script.push_str("  unset COLCON_PREFIX_PATH\n");
-    script.push_str("  unset PYTHONPATH\n");
-    script.push_str("  unset LD_LIBRARY_PATH\n");
-    script.push_str("  unset DYLD_LIBRARY_PATH\n");
-    script.push_str("  unset PKG_CONFIG_PATH\n");
-    script.push_str("fi\n\n");
+        r#"_rosenv_strip() {
+  echo "$1" | tr ':' '\n' | grep -v "/opt/ros/" | tr '\n' ':' | sed 's/:$//'
+}
 
-    // Source new distribution
-    script.push_str(&format!("# Activate ROS 2 {}\n", distro));
-    script.push_str(&format!("export ROS_DISTRO={}\n", distro));
-    script.push_str(&format!("source {}\n", setup_path.display()));
+_rosenv_append() {
+  local var_name="$1" dir="$2"
+  if [ -d "$dir" ]; then
+    local current
+    eval "current=\$$var_name"
+    if [[ ":${current}:" != *":${dir}:"* ]]; then
+      eval "export $var_name=\"${current:+${current}:}${dir}\""
+    fi
+  fi
+}
+
+"#,
+    );
+
+    script.push_str("# Strip inherited /opt/ros paths from parent shell\n");
+    for var in &[
+        "PATH",
+        "PYTHONPATH",
+        "PKG_CONFIG_PATH",
+        "CMAKE_PREFIX_PATH",
+        "AMENT_PREFIX_PATH",
+    ] {
+        script.push_str(&format!(
+            "export {var}=$(_rosenv_strip \"${var}\")\n",
+            var = var
+        ));
+    }
+
+    script.push_str(&format!("\n# Activate ROS 2 {}\n", distro));
+    script.push_str(&format!("export ROS_DISTRO=\"{}\"\n", distro));
+    script.push_str("export ROS_VERSION=\"2\"\n");
+    script.push_str("export ROS_PYTHON_VERSION=\"3\"\n");
+
+    script.push_str(&format!(
+        "\n_rosenv_append AMENT_PREFIX_PATH \"{ros_root}\"\n"
+    ));
+    script.push_str(&format!(
+        "_rosenv_append CMAKE_PREFIX_PATH \"{ros_root}\"\n"
+    ));
+    script.push_str(&format!("_rosenv_append PATH \"{ros_root}/bin\"\n"));
+    script.push_str(&format!(
+        "_rosenv_append PKG_CONFIG_PATH \"{ros_root}/lib/pkgconfig\"\n"
+    ));
+
+    script.push_str(&format!(
+        "for _rosenv_pypath in \"{ros_root}\"/lib/python*/site-packages; do\n"
+    ));
+    script.push_str("  _rosenv_append PYTHONPATH \"$_rosenv_pypath\"\n");
+    script.push_str("done\n");
+    script.push_str("unset _rosenv_pypath\n");
+
+    script.push_str("\nunset -f _rosenv_strip _rosenv_append\n");
 
     Ok(script)
 }
@@ -343,8 +370,6 @@ unset AMENT_PREFIX_PATH
 unset CMAKE_PREFIX_PATH
 unset COLCON_PREFIX_PATH
 unset PYTHONPATH
-unset LD_LIBRARY_PATH
-unset DYLD_LIBRARY_PATH
 unset PKG_CONFIG_PATH
 "#
     .to_string()
@@ -876,8 +901,6 @@ _rosenv_append() {
     for var in &[
         "PATH",
         "PYTHONPATH",
-        "LD_LIBRARY_PATH",
-        "DYLD_LIBRARY_PATH",
         "PKG_CONFIG_PATH",
         "CMAKE_PREFIX_PATH",
         "AMENT_PREFIX_PATH",
@@ -900,12 +923,6 @@ _rosenv_append() {
             "_rosenv_append CMAKE_PREFIX_PATH \"{ros_root}\"\n"
         ));
         script.push_str(&format!("_rosenv_append PATH \"{ros_root}/bin\"\n"));
-        script.push_str(&format!(
-            "_rosenv_append LD_LIBRARY_PATH \"{ros_root}/lib\"\n"
-        ));
-        script.push_str(&format!(
-            "_rosenv_append DYLD_LIBRARY_PATH \"{ros_root}/lib\"\n"
-        ));
         script.push_str(&format!(
             "_rosenv_append PKG_CONFIG_PATH \"{ros_root}/lib/pkgconfig\"\n"
         ));
@@ -950,8 +967,12 @@ fn cmd_pixi_activate() -> Result<()> {
 
     if PathBuf::from("install/setup.bash").exists() {
         script.push_str("source install/setup.bash\n");
+        script.push_str("unset LD_LIBRARY_PATH\n");
+        script.push_str("unset DYLD_LIBRARY_PATH\n");
     } else if PathBuf::from("install/setup.sh").exists() {
         script.push_str("source install/setup.sh\n");
+        script.push_str("unset LD_LIBRARY_PATH\n");
+        script.push_str("unset DYLD_LIBRARY_PATH\n");
     }
 
     print!("{}", script);
@@ -1109,8 +1130,6 @@ mod tests {
             "CMAKE_PREFIX_PATH",
             "COLCON_PREFIX_PATH",
             "PYTHONPATH",
-            "LD_LIBRARY_PATH",
-            "DYLD_LIBRARY_PATH",
             "PKG_CONFIG_PATH",
         ];
 
