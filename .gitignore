@@ -1,3 +1,4 @@
+# Build
 target/
 output/
 
@@ -5,8 +6,5 @@ output/
 *.md
 !README.md
 
-# Documentation site (Astro Starlight)
-docs/node_modules/
-docs/dist/
-docs/.astro/
-docs/.DS_Store
+# Misc
+.claude/
