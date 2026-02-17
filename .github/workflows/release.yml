@@ -100,7 +100,7 @@ jobs:
       - name: Upload to prefix.dev
         run: |
           for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \)); do
-            rattler-build upload prefix -c ${{ vars.PREFIX_DEV_CHANNEL }} "$pkg"
+            rattler-build upload prefix -c ${{ vars.PREFIX_DEV_CHANNEL }} "$pkg" || echo "Package already published"
           done
         env:
           PREFIX_API_KEY: ${{ secrets.PREFIX_API_KEY }}
