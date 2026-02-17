@@ -40,17 +40,33 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             artifact_name: rosenv-linux-x86_64
+            use_cross: false
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            artifact_name: rosenv-linux-aarch64
+            use_cross: true
           - os: macos-latest
             target: aarch64-apple-darwin
             artifact_name: rosenv-macos-aarch64
+            use_cross: false
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
-      - run: cargo build --release --target ${{ matrix.target }}
+      - name: Install cross
+        if: matrix.use_cross
+        run: cargo install cross --git https://github.com/cross-rs/cross
+      - name: Build
+        run: |
+          if [ "${{ matrix.use_cross }}" = "true" ]; then
+            cross build --release --target ${{ matrix.target }}
+          else
+            cargo build --release --target ${{ matrix.target }}
+          fi
       - name: Strip binary
+        if: ${{ !matrix.use_cross }}
         run: strip target/${{ matrix.target }}/release/rosenv
       - name: Create tarball
         run: |
@@ -69,6 +85,8 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux-64
+          - os: ubuntu-latest
+            platform: linux-aarch64
           - os: macos-latest
             platform: osx-arm64
     runs-on: ${{ matrix.os }}
@@ -81,7 +99,7 @@ jobs:
           recipe-path: recipe/recipe.yaml
           upload-artifact: true
           artifact-name: rosenv-conda-${{ matrix.platform }}
-          build-args: --package-format tar-bz2
+          build-args: --target-platform ${{ matrix.platform }} --package-format tar-bz2
       - name: Upload to prefix.dev
         run: |
           for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \)); do
@@ -109,13 +127,7 @@ jobs:
       - name: Download binary artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: rosenv-*-x86_64
-          path: artifacts
-          merge-multiple: true
-      - name: Download macos artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: rosenv-*-aarch64
+          pattern: rosenv-{linux,macos}-*
           path: artifacts
           merge-multiple: true
       - name: Create GitHub Release
