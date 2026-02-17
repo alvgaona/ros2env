@@ -15,6 +15,11 @@ homepage = "https://alvgaona.gitbook.io/ros2env"
 name = "rosenv"
 path = "src/main.rs"
 
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/rosenv-{ target }-v{ version }.tar.gz"
+bin-dir = "rosenv"
+pkg-fmt = "tgz"
+
 [dependencies]
 clap = { version = "4.5", features = ["derive", "cargo"] }
 anyhow = "1.0"
