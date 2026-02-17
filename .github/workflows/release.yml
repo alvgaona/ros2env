@@ -61,8 +61,8 @@ jobs:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.artifact_name }}.tar.gz
 
-  build-conda:
-    name: Build Conda Package
+  build-and-publish-conda:
+    name: Build & Publish Conda Package
     strategy:
       fail-fast: false
       matrix:
@@ -82,26 +82,9 @@ jobs:
           upload-artifact: true
           artifact-name: rosenv-conda-${{ matrix.platform }}
           build-args: --package-format tar-bz2
-
-  publish-conda:
-    name: Publish to prefix.dev
-    needs: [build-conda]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.1
-        with:
-          run-install: false
-      - run: pixi global install rattler-build
-      - name: Download conda artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: rosenv-conda-*
-          path: conda-packages
-          merge-multiple: true
       - name: Upload to prefix.dev
         run: |
-          for pkg in conda-packages/*.tar.bz2; do
+          for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \)); do
             rattler-build upload prefix -c ${{ vars.PREFIX_DEV_CHANNEL }} "$pkg"
           done
         env:
@@ -109,7 +92,7 @@ jobs:
 
   release:
     name: Create Release
-    needs: [publish-crate, build-binaries, publish-conda]
+    needs: [publish-crate, build-binaries, build-and-publish-conda]
     runs-on: ubuntu-latest
     permissions:
       contents: write
