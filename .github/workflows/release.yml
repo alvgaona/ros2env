@@ -82,10 +82,13 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux-64
+            extra_args: ""
           - os: ubuntu-latest
             platform: linux-aarch64
+            extra_args: --no-test
           - os: macos-latest
             platform: osx-arm64
+            extra_args: ""
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -96,7 +99,7 @@ jobs:
           recipe-path: recipe/recipe.yaml
           upload-artifact: true
           artifact-name: rosenv-conda-${{ matrix.platform }}
-          build-args: --target-platform ${{ matrix.platform }} --package-format tar-bz2
+          build-args: --target-platform ${{ matrix.platform }} --package-format tar-bz2 ${{ matrix.extra_args }}
       - name: Upload to prefix.dev
         run: |
           for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \)); do
