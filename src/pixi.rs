@@ -4,6 +4,10 @@ use std::path::PathBuf;
 
 use crate::distro::get_ros_root;
 
+const HELPERS: &str = include_str!("assets/helpers.sh");
+const PIXI_BASE: &str = include_str!("assets/pixi_activate_base.sh");
+const PIXI_GLOBAL: &str = include_str!("assets/pixi_activate_global.sh");
+
 pub fn detect_pixi_ros_distro() -> Option<String> {
     let pixi_env = PathBuf::from(".pixi/envs/default/conda-meta");
     if !pixi_env.exists() {
@@ -38,68 +42,23 @@ pub fn detect_pixi_ros_distro() -> Option<String> {
 }
 
 fn generate_pixi_activate_script(distro: &str, append_global: bool) -> String {
+    let ros_root = format!("/opt/ros/{}", distro);
+
     let mut script = String::new();
-
-    script.push_str(
-        r#"_rosenv_strip() {
-  echo "$1" | tr ':' '\n' | grep -v "/opt/ros/" | tr '\n' ':' | sed 's/:$//'
-}
-
-_rosenv_append() {
-  local var_name="$1" dir="$2"
-  if [ -d "$dir" ]; then
-    local current
-    eval "current=\$$var_name"
-    if [[ ":${current}:" != *":${dir}:"* ]]; then
-      eval "export $var_name=\"${current:+${current}:}${dir}\""
-    fi
-  fi
-}
-
-"#,
-    );
-
-    script.push_str("# Strip inherited /opt/ros paths from parent shell\n");
-    for var in &[
-        "PATH",
-        "PYTHONPATH",
-        "PKG_CONFIG_PATH",
-        "CMAKE_PREFIX_PATH",
-        "AMENT_PREFIX_PATH",
-    ] {
-        script.push_str(&format!(
-            "export {var}=$(_rosenv_strip \"${var}\")\n",
-            var = var
-        ));
-    }
-
-    script.push_str(&format!("\nexport ROS_DISTRO=\"{}\"\n", distro));
+    script.push_str(HELPERS);
+    script.push('\n');
+    script.push_str(PIXI_BASE);
 
     if append_global {
-        let ros_root = format!("/opt/ros/{}", distro);
-        script.push_str(&format!("\n# Append global ROS {} paths\n", distro));
-        script.push_str(&format!(
-            "_rosenv_append AMENT_PREFIX_PATH \"{ros_root}\"\n"
-        ));
-        script.push_str(&format!(
-            "_rosenv_append CMAKE_PREFIX_PATH \"{ros_root}\"\n"
-        ));
-        script.push_str(&format!("_rosenv_append PATH \"{ros_root}/bin\"\n"));
-        script.push_str(&format!(
-            "_rosenv_append PKG_CONFIG_PATH \"{ros_root}/lib/pkgconfig\"\n"
-        ));
-
-        script.push_str(&format!(
-            "for _rosenv_pypath in \"{ros_root}\"/lib/python*/site-packages; do\n"
-        ));
-        script.push_str("  _rosenv_append PYTHONPATH \"$_rosenv_pypath\"\n");
-        script.push_str("done\n");
-        script.push_str("unset _rosenv_pypath\n");
+        script.push('\n');
+        script.push_str(PIXI_GLOBAL);
     }
 
     script.push_str("\nunset -f _rosenv_strip _rosenv_append\n");
 
     script
+        .replace("{distro}", distro)
+        .replace("{ros_root}", &ros_root)
 }
 
 pub fn cmd_pixi_activate() -> Result<()> {
