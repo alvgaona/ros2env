@@ -12,9 +12,8 @@ command — no more manually sourcing setup scripts or juggling environment vari
 
 ## Why ros2env?
 
-- **Install once, use everywhere**: A single Pixi global installation of each ROS 2 distribution is shared across
-  all your workspaces. Without ros2env, every Pixi workspace that depends on ROS 2 downloads and stores its own
-  copy — easily 3–5 GB per distro. With ros2env, you pay that cost once.
+- **Install once, use everywhere**: Install each ROS 2 distribution once with `pixi global` and make it available
+  to all your workspaces — no need to add ROS 2 as a dependency in every project's `pixi.toml`.
 - **Multiple distros, one machine**: Install and manage several ROS 2 distributions side by side without conflicts.
 - **Clean environment switching**: Activating a distribution strips stale paths and variables from a previously
   active distro, so you always get a clean environment.
