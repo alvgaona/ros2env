@@ -63,10 +63,6 @@ pub enum Commands {
     /// Verify installation and diagnose issues
     Doctor,
 
-    /// Show guide for installing ROS 2 with pixi global
-    #[command(name = "setup-guide")]
-    SetupGuide,
-
     /// Generate activation script for pixi workspaces
     Pixi {
         #[command(subcommand)]

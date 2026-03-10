@@ -42,33 +42,3 @@ pub fn cmd_setup() -> Result<()> {
 
     Ok(())
 }
-
-pub fn cmd_setup_guide() -> Result<()> {
-    const GUIDE_URL: &str = "https://github.com/alvgaona/ros2env/blob/main/SETUP_GUIDE.md";
-
-    println!("Opening ROS 2 Setup Guide in your browser...\n");
-    println!("URL: {}\n", GUIDE_URL);
-
-    let open_cmd = if cfg!(target_os = "macos") {
-        "open"
-    } else if cfg!(target_os = "linux") {
-        "xdg-open"
-    } else {
-        anyhow::bail!("Unsupported platform for opening URLs");
-    };
-
-    match std::process::Command::new(open_cmd).arg(GUIDE_URL).spawn() {
-        Ok(_) => {
-            println!("✓ Setup guide opened in your default browser");
-            println!("\nIf the browser didn't open, visit:");
-            println!("  {}", GUIDE_URL);
-            Ok(())
-        }
-        Err(e) => {
-            eprintln!("✗ Failed to open browser: {}", e);
-            println!("\nPlease visit the guide manually:");
-            println!("  {}", GUIDE_URL);
-            Ok(())
-        }
-    }
-}

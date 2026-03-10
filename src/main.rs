@@ -40,7 +40,6 @@ fn main() -> Result<()> {
         Commands::Cleanup => symlink::cmd_cleanup(),
         Commands::Refresh => symlink::cmd_refresh(),
         Commands::Doctor => doctor::cmd_doctor(),
-        Commands::SetupGuide => setup::cmd_setup_guide(),
         Commands::Pixi { command } => match command {
             PixiCommands::Activate => pixi::cmd_pixi_activate(),
         },

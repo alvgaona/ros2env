@@ -84,7 +84,6 @@ rosenv deactivate
 | `refresh`            | Re-scan Pixi installations and update symlinks                 |
 | `doctor`             | Diagnose common issues with your setup                         |
 | `pixi activate`      | Activate a ROS distribution inside a Pixi workspace            |
-| `setup-guide`        | Open the Pixi + ROS 2 setup guide                              |
 
 ## Documentation
 
