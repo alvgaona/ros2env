@@ -25,6 +25,19 @@ command — no more manually sourcing setup scripts or juggling environment vari
 - **Pixi workspace support**: Detects ROS distributions inside Pixi workspaces and can merge them with global
   installations for local colcon-based development.
 
+## Prerequisites
+
+- [Pixi](https://pixi.sh) installed
+- At least one ROS 2 distribution installed via `pixi global`, e.g.:
+  ```bash
+  pixi global install --environment ros-humble -c robostack-staging ros-humble-desktop
+  ```
+
+## Supported platforms
+
+- Linux (x86_64, aarch64)
+- macOS (Apple Silicon, Intel)
+
 ## Installation
 
 ### From crates.io

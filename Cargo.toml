@@ -1,6 +1,6 @@
 [package]
 name = "ros2env"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Alvaro J. Gaona"]
 description = "ROS 2 distribution environment manager for Pixi global installations"
